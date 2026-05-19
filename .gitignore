@@ -1,0 +1,40 @@
+# Public repo hygiene
+
+# Local editor / workspace metadata
+**/.agents/
+**/.codex/
+**/.git/
+REPO-CONTEXT.md
+web/AGENTS.md
+web/CLAUDE.md
+
+# Frontend generated output
+web/node_modules/
+web/.next/
+web/.turbo/
+web/coverage/
+web/*.tsbuildinfo
+**/package-lock.json
+
+# Local environment files and secrets
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+
+# Generated dependencies and build artifacts
+**/node_modules/
+**/dist/
+**/build/
+**/vendor/
+
+# WordPress local data
+wordpress/wp-content/uploads/
+wordpress/wp-content/upgrade/
+wordpress/wp-content/languages/
+
+# Misc
+.DS_Store
+*.log
+*.pem
