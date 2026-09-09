@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
@@ -24,6 +25,18 @@ function isActivePath(pathname: string, href: string) {
 
 export function Navbar() {
   const pathname = usePathname();
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setHasScrolled(window.scrollY > 24);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   function closeDrawer() {
     const drawer = document.getElementById("site-drawer") as HTMLInputElement | null;
@@ -34,7 +47,13 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-base-200/70 bg-base-100/85 backdrop-blur-xl supports-[backdrop-filter]:bg-base-100/75">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        hasScrolled
+          ? "translate-y-0 bg-base-100/35 opacity-100 shadow-lg shadow-black/5 backdrop-blur-xl supports-backdrop-filter:bg-base-100/25"
+          : "-translate-y-full opacity-0 pointer-events-none"
+      }`}
+    >
       <div className="section-shell">
         <div className="navbar min-h-0 px-0 py-3">
           <div className="navbar-start gap-2">

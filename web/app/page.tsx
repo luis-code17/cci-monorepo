@@ -45,18 +45,18 @@ export default async function HomePage() {
   const latestVideos = (await getLatestVideos(3)).slice(0, 3);
 
   return (
-    <div className="section-shell py-6 sm:py-8 lg:py-10">
+    <>
       <HeroSection
         title="Bienvenidos a CCI Sabadell"
         subtitle="Un lugar de fe, comunidad y esperanza."
-        imageUrl="/anuncio_miercoles.jpg"
-        ctaHref="/about"
-        ctaLabel="Conócenos"
+        imageUrlLight="/cci_sabadell_light_background.png"
+        imageUrlDark="/cci_sabadell_dark_background.png"
       />
 
-      <section className="mt-10">
-        <VerseCard verse={verse.verse} reference={verse.reference} />
-      </section>
+      <div id="home-content" className="section-shell py-6 sm:py-8 lg:py-10">
+        <section className="mt-4 sm:mt-6">
+          <VerseCard verse={verse.verse} reference={verse.reference} />
+        </section>
 {/* 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">
@@ -157,6 +157,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

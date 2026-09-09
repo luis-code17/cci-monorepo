@@ -11,7 +11,7 @@ type AmountSelectorProps = {
 
 const suggestedAmounts = [
   { value: 10, label: "10€" },
-  { value: 25, label: "25€", featured: true },
+  { value: 25, label: "25€" },
   { value: 50, label: "50€" },
   { value: 100, label: "100€" },
 ];
@@ -41,12 +41,12 @@ export function AmountSelector({ onAmountChange, ctaDisabled = false, ctaLoading
   const formattedSelection = selectedAmount ?? (customAmount ? Number.parseFloat(customAmount) : null);
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <div className="text-center">
         <p className="text-[11px] uppercase tracking-[0.28em] text-base-content/45">Selecciona un importe</p>
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {suggestedAmounts.map((amount) => {
           const isSelected = selectedAmount === amount.value;
 
@@ -66,11 +66,6 @@ export function AmountSelector({ onAmountChange, ctaDisabled = false, ctaLoading
                   <div className={`text-lg font-semibold font-serif ${isSelected ? "text-primary-content" : "text-base-content"}`}>
                     {amount.label}
                   </div>
-                  {amount.featured ? (
-                    <div className={`mt-1 text-[10px] uppercase tracking-[0.22em] ${isSelected ? "text-primary-content/75" : "text-base-content/45"}`}>
-                      Recomendado
-                    </div>
-                  ) : null}
                 </div>
 
                 <div
@@ -86,7 +81,7 @@ export function AmountSelector({ onAmountChange, ctaDisabled = false, ctaLoading
         })}
       </div>
 
-      <div className="mx-auto max-w-md">
+      <div className="mx-auto max-w-md pt-1">
         <label htmlFor="customAmount" className="mb-2 block text-xs uppercase tracking-[0.22em] text-base-content/45">
           O ingresa otro importe
         </label>

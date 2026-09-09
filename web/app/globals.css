@@ -120,6 +120,30 @@
   --font-cormorant: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 }
 
+.hero-theme-dark {
+  display: none;
+}
+
+[data-theme="dark"] .hero-theme-light {
+  display: none;
+}
+
+[data-theme="dark"] .hero-theme-dark {
+  display: block;
+}
+
+.hero-title {
+  font-family: "Montserrat", "Avenir Next", "Helvetica Neue", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.hero-subtitle {
+  font-family: "Montserrat", "Avenir Next", "Helvetica Neue", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
 html {
   scroll-behavior: smooth;
 }

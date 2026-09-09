@@ -1,5 +1,4 @@
 import { DonationHero } from "@/components/donation/DonationHero";
-import { AmountSelector } from "@/components/donation/AmountSelector";
 import { DonationForm } from "@/components/donation/DonationForm";
 import { PaymentMethodCard } from "@/components/donation/PaymentMethodCard";
 import { ScriptureCard } from "@/components/donation/ScriptureCard";
@@ -35,9 +34,21 @@ export default function OfrendasPage() {
         imageUrl="/anuncio_miercoles.jpg"
       />
 
-      {/* Donation Form */}
-      <section className="space-y-8">
-        <DonationForm />
+      {/* Donation Form and Scripture */}
+      <section className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+        <section className="surface-card flex min-h-104 flex-col justify-center px-6 py-12 sm:px-8">
+          <div className="mb-6 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-base-content/55 font-medium">Tu aporte</p>
+            <h2 className="mt-2 text-3xl font-semibold font-serif sm:text-4xl">Haz tu donación</h2>
+          </div>
+          <DonationForm />
+        </section>
+
+        <ScriptureCard
+          title="Dar con Alegría"
+          verse="Cada uno dé como propuso en su corazón, no con tristeza ni por obligación, porque Dios ama al dador alegre."
+          reference="2 Corintios 9:7"
+        />
       </section>
 
       {/* Payment Methods Section */}
@@ -70,14 +81,6 @@ export default function OfrendasPage() {
           />
         </div>
       </section>
-
-
-      {/* Scripture Card */}
-      <ScriptureCard
-        title="Dar con Alegría"
-        verse="Cada uno dé como propuso en su corazón, no con tristeza ni por obligación, porque Dios ama al dador alegre."
-        reference="2 Corintios 9:7"
-      />
 
       {/* Information Cards */}
       <section className="space-y-6">
