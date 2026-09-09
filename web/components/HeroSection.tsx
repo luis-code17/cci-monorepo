@@ -5,10 +5,11 @@ type HeroSectionProps = {
   title: string;
   subtitle: string;
   imageUrlLight: string;
+  imageUrlLightMobile: string;
   imageUrlDark: string;
 };
 
-export function HeroSection({ title, subtitle, imageUrlLight, imageUrlDark }: HeroSectionProps) {
+export function HeroSection({ title, subtitle, imageUrlLight, imageUrlLightMobile, imageUrlDark }: HeroSectionProps) {
   return (
     <section className="relative min-h-svh w-full overflow-hidden bg-base-200">
       <Image
@@ -17,6 +18,14 @@ export function HeroSection({ title, subtitle, imageUrlLight, imageUrlDark }: He
         fill
         sizes="100vw"
         className="hero-theme-light object-cover"
+        priority
+      />
+      <Image
+        src={imageUrlLightMobile}
+        alt="CCI Sabadell"
+        fill
+        sizes="100vw"
+        className="hero-theme-light-mobile object-cover"
         priority
       />
       <Image
@@ -46,7 +55,7 @@ export function HeroSection({ title, subtitle, imageUrlLight, imageUrlDark }: He
       <a
         href="#home-content"
         aria-label="Desplazarse al contenido"
-        className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 text-white/85 transition-colors hover:text-white"
+        className="absolute bottom-7 right-6 z-10 text-white/85 transition-colors hover:text-white sm:left-1/2 sm:right-auto sm:-translate-x-1/2"
       >
         <ChevronDown className="h-9 w-9 animate-bounce" strokeWidth={1.5} aria-hidden="true" />
       </a>

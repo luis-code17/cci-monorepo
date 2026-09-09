@@ -50,6 +50,7 @@ export default async function HomePage() {
         title="Bienvenidos a CCI Sabadell"
         subtitle="Un lugar de fe, comunidad y esperanza."
         imageUrlLight="/cci_sabadell_light_background.png"
+        imageUrlLightMobile="/cci_sabadell_light_background_mb.png"
         imageUrlDark="/cci_sabadell_dark_background.png"
       />
 

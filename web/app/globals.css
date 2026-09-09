@@ -121,15 +121,40 @@
 }
 
 .hero-theme-dark {
-  display: none;
+  display: none !important;
+}
+
+.hero-theme-light-mobile {
+  display: none !important;
+}
+
+@media (max-width: 639px) {
+  .hero-theme-light,
+  .hero-theme-light-mobile,
+  .hero-theme-dark {
+    object-fit: cover !important;
+    object-position: left center;
+  }
+
+  html:not([data-theme="dark"]) .hero-theme-light {
+    display: none !important;
+  }
+
+  html:not([data-theme="dark"]) .hero-theme-light-mobile {
+    display: block !important;
+  }
 }
 
 [data-theme="dark"] .hero-theme-light {
-  display: none;
+  display: none !important;
+}
+
+[data-theme="dark"] .hero-theme-light-mobile {
+  display: none !important;
 }
 
 [data-theme="dark"] .hero-theme-dark {
-  display: block;
+  display: block !important;
 }
 
 .hero-title {
