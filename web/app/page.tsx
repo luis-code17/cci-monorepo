@@ -57,7 +57,7 @@ export default async function HomePage() {
       <section className="mt-10">
         <VerseCard verse={verse.verse} reference={verse.reference} />
       </section>
-
+{/* 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">
           <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Blog reciente</p>
@@ -86,7 +86,7 @@ export default async function HomePage() {
             <span>No hay publicaciones disponibles en este momento</span>
           </div>
         )}
-      </section>
+      </section> */}
 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">

@@ -143,7 +143,7 @@ export default function AboutPage() {
         </aside>
       </section>
 
-      <section className="mt-8">
+      {/* <section className="mt-8">
         <div className="grid gap-6 md:grid-cols-[0.94fr_1.06fr] md:items-stretch">
           <article className="surface-card overflow-hidden h-full">
             <div className="relative aspect-[16/10]">
@@ -175,7 +175,7 @@ export default function AboutPage() {
             </div>
           </article>
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

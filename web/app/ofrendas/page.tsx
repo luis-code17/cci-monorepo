@@ -1,4 +1,3 @@
-import { Smartphone, CreditCard, ArrowRight } from "lucide-react";
 import { DonationHero } from "@/components/donation/DonationHero";
 import { AmountSelector } from "@/components/donation/AmountSelector";
 import { DonationForm } from "@/components/donation/DonationForm";
@@ -55,14 +54,19 @@ export default function OfrendasPage() {
           <PaymentMethodCard
             title="Bizum"
             description="Envía tu donación de forma rápida y segura"
-            icon={Smartphone}
+            icon="smartphone"
             status="soon"
           />
           <PaymentMethodCard
             title="Transferencia Bancaria"
             description="Realiza una transferencia directa a nuestra cuenta"
-            icon={ArrowRight}
+            icon="landmark"
             status="coming"
+            bankDetails={{
+              titular: "CCI SABADELL",
+              iban: "ES00 0000 0000 0000 0000 0000",
+              concepto: "Donativo",
+            }}
           />
         </div>
       </section>

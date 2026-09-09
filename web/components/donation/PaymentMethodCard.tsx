@@ -1,14 +1,24 @@
-import { LucideIcon } from "lucide-react";
+"use client";
+
+import { Landmark, Smartphone } from "lucide-react";
+import { useState } from "react";
 
 type PaymentMethodCardProps = {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: "smartphone" | "landmark";
   status?: "available" | "soon" | "coming";
+  bankDetails?: {
+    titular: string;
+    iban: string;
+    concepto: string;
+  };
 };
 
-export function PaymentMethodCard({ title, description, icon: Icon, status = "soon" }: PaymentMethodCardProps) {
+export function PaymentMethodCard({ title, description, icon, status = "soon", bankDetails }: PaymentMethodCardProps) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const isSoon = status !== "available";
+  const Icon = icon === "smartphone" ? Smartphone : Landmark;
   
   return (
     <article className={`surface-card overflow-hidden transition-all duration-300 hover:shadow-md ${isSoon ? "opacity-75" : ""}`}>
@@ -23,11 +33,32 @@ export function PaymentMethodCard({ title, description, icon: Icon, status = "so
           </div>
         </div>
 
-        {isSoon && (
+        {isSoon && !bankDetails && (
           <div className="flex items-center gap-2 pt-2">
             <div className="h-2 w-2 rounded-full bg-base-content/40" />
             <span className="text-xs uppercase tracking-[0.2em] font-medium text-base-content/50">Próximamente disponible</span>
           </div>
+        )}
+
+        {bankDetails && (
+          <>
+            <button
+              type="button"
+              aria-expanded={isDetailsOpen}
+              onClick={() => setIsDetailsOpen((open) => !open)}
+              className="w-full rounded-lg bg-primary/10 px-4 py-2 font-medium text-primary transition-colors duration-200 hover:bg-primary/20"
+            >
+              {isDetailsOpen ? "Ocultar datos bancarios" : "Ver datos bancarios"}
+            </button>
+
+            {isDetailsOpen && (
+              <div className="space-y-3 rounded-lg border border-base-200 bg-base-200/40 p-4 text-sm">
+                <p><span className="font-semibold">Titular:</span> {bankDetails.titular}</p>
+                <p className="break-all"><span className="font-semibold">IBAN:</span> {bankDetails.iban}</p>
+                <p><span className="font-semibold">Concepto:</span> {bankDetails.concepto}</p>
+              </div>
+            )}
+          </>
         )}
 
         {!isSoon && (
