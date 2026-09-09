@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
   { href: "/", label: "Inicio" },
-  { href: "/blog", label: "Blog" },
+  // { href: "/blog", label: "Blog" },
   { href: "/predicaciones", label: "Predicaciones" },
   { href: "/about", label: "Sobre Nosotros" },
   { href: "/ofrendas", label: "Ofrendas y Diezmos" },

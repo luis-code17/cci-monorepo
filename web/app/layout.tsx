@@ -62,9 +62,9 @@ export default function RootLayout({
               <li className="mb-4">
                 <span className="text-lg font-semibold">CCI Sabadell</span>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/blog">Blog</Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/predicaciones">Predicaciones</Link>
               </li>
