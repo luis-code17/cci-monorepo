@@ -1,4 +1,5 @@
-import { ArrowRight, Quote } from "lucide-react";
+import Image from "next/image";
+import { ArrowDown, ArrowRight, Quote } from "lucide-react";
 
 type VerseCardProps = {
   verse: string;
@@ -7,28 +8,52 @@ type VerseCardProps = {
 
 export function VerseCard({ verse, reference }: VerseCardProps) {
   return (
-    <article className="surface-card overflow-hidden bg-base-200/60">
-      <div className="h-1 bg-gradient-to-r from-secondary via-primary to-accent" />
-      <div className="space-y-6 p-6 sm:p-8 lg:p-10">
-        <div className="flex items-center gap-3">
-          <div className="badge badge-secondary badge-outline rounded-full px-4 py-3">
-            <Quote className="mr-2 h-4 w-4" aria-hidden="true" />
+    <section id="verse-of-the-day" className="relative isolate w-full overflow-hidden bg-base-200 shadow-[0_25px_80px_-35px_rgba(15,23,42,0.75)]">
+      <Image
+        src="/versiculo_del_dia.jpeg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="hidden object-cover md:block"
+      />
+      <Image
+        src="/versiculo_del_dia_mobile.jpeg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="block object-cover md:hidden"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/35" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/15" />
+
+      <div className="relative z-10 flex min-h-[100svh] items-center justify-center px-5 pb-20 pt-10 sm:px-8 md:px-12 lg:px-16">
+        <div className="mx-auto w-full max-w-6xl text-white md:text-left">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/90 backdrop-blur-sm sm:px-5 sm:text-[0.75rem] md:mb-6">
+            <Quote className="h-4 w-4" aria-hidden="true" />
             Versículo del día
           </div>
-          <div className="hidden h-px flex-1 bg-base-content/10 sm:block" />
-          <div className="hidden items-center gap-2 text-xs font-medium uppercase tracking-[0.24em] text-base-content/45 sm:flex">
+
+          <blockquote className="max-w-[min(90vw,44rem)] break-words font-serif leading-[0.9] tracking-[-0.04em] text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.35)] text-[clamp(2.1rem,5vw,5.5rem)] md:text-left md:text-[clamp(2.4rem,5vw,6rem)]">
+            {verse}
+          </blockquote>
+
+          <div className="mt-5 flex items-center gap-2 text-[0.68rem] font-medium uppercase tracking-[0.28em] text-white/80 sm:text-xs">
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            Hoy
+            <span>{reference}</span>
           </div>
         </div>
-        <blockquote className="text-balance font-serif text-3xl leading-[1.15] text-base-content md:text-4xl lg:text-[2.75rem]">
-          {verse}
-        </blockquote>
-        <div className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.24em] text-base-content/55">
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          <span>{reference}</span>
-        </div>
       </div>
-    </article>
+
+      <a
+        href="#predicaciones-section"
+        aria-label="Desplazarse a predicaciones"
+        className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/85 transition-colors hover:text-white"
+      >
+        <ArrowDown className="h-8 w-8 animate-bounce" strokeWidth={1.5} aria-hidden="true" />
+      </a>
+    </section>
   );
 }

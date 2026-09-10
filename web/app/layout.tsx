@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import { BrandMark } from "@/components/brand-mark";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { getSiteUrl } from "@/lib/env";
 import { DEFAULT_THEME } from "@/lib/theme";
 import "./globals.css";
@@ -58,9 +60,12 @@ export default function RootLayout({
           </div>
           <div className="drawer-side z-50">
             <label htmlFor="site-drawer" aria-label="Cerrar menú" className="drawer-overlay" />
-            <ul className="menu min-h-full w-80 bg-base-200 p-6 text-base-content">
-              <li className="mb-4">
-                <span className="text-lg font-semibold">CCI Sabadell</span>
+            <ul className="menu min-h-full w-80 bg-base-200/95 p-6 text-base-content shadow-2xl backdrop-blur-sm">
+              <li className="mb-5 border-b border-base-content/10 pb-4">
+                <Link href="/" className="flex items-center gap-3 px-0 py-1">
+                  <BrandMark size="sm" className="w-24" />
+                  <span className="text-base font-semibold tracking-wide text-base-content">CCI Sabadell</span>
+                </Link>
               </li>
               {/* <li>
                 <Link href="/blog">Blog</Link>
@@ -73,6 +78,12 @@ export default function RootLayout({
               </li>
               <li>
                 <Link href="/ofrendas">Ofrendas y Diezmos</Link>
+              </li>
+              <li className="mt-4 border-t border-base-content/10 pt-4">
+                <div className="flex w-full items-center justify-between gap-3 rounded-xl border border-base-content/10 bg-base-100/70 px-3 py-2.5 shadow-sm backdrop-blur-sm">
+                  <span className="text-sm font-medium text-base-content/80">Tema</span>
+                  <ThemeToggle />
+                </div>
               </li>
             </ul>
           </div>

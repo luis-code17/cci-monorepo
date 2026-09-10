@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-import { BrandMark } from "@/components/brand-mark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
@@ -50,35 +49,28 @@ export function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         hasScrolled
-          ? "translate-y-0 bg-base-100/35 opacity-100 shadow-lg shadow-black/5 backdrop-blur-xl supports-backdrop-filter:bg-base-100/25"
+          ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
       <div className="section-shell">
-        <div className="navbar min-h-0 px-0 py-3">
-          <div className="navbar-start gap-2">
+        <div className="navbar relative mt-3 min-h-0 px-0 py-2.5">
+          <div className="navbar-start gap-2 lg:w-auto lg:flex-1">
             <label
               htmlFor="site-drawer"
-              className="btn btn-ghost btn-circle lg:hidden"
+              className="btn btn-ghost btn-circle border border-base-content/10 bg-base-100/60 text-base-content shadow-sm backdrop-blur-sm lg:hidden"
               aria-label="Abrir menú"
             >
               <Menu className="h-5 w-5" aria-hidden="true" />
             </label>
-
-            <Link href="/" className="flex items-center gap-3" onClick={closeDrawer}>
-              <BrandMark size="sm" className="h-11 w-auto" />
-              <span className="hidden flex-col leading-tight sm:flex">
-                <span className="text-sm font-semibold tracking-[0.18em] text-base-content">CCI Sabadell</span>
-                <span className="text-[0.68rem] uppercase tracking-[0.28em] text-base-content/60">
-                  Fe, comunidad y esperanza
-                </span>
-              </span>
-            </Link>
           </div>
 
-          <div className="navbar-center hidden lg:flex">
-            <nav aria-label="Principal">
-              <ul className="menu menu-horizontal gap-1 px-1 text-sm">
+          <div className="navbar-center absolute left-1/2 hidden -translate-x-1/2 lg:flex">
+            <nav
+              aria-label="Principal"
+              className="lg:rounded-full lg:border lg:border-base-content/10 lg:bg-base-100/70 lg:px-3 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-sm"
+            >
+              <ul className="menu menu-horizontal items-center gap-2 px-1 text-sm lg:gap-2">
                 {links.map((link) => {
                   const active = isActivePath(pathname, link.href);
 
@@ -88,7 +80,12 @@ export function Navbar() {
                         href={link.href}
                         onClick={closeDrawer}
                         aria-current={active ? "page" : undefined}
-                        className={active ? "bg-base-200 font-medium text-base-content" : "text-base-content/70"}
+                        className={[
+                          "relative flex items-center justify-center px-2 py-1.5 text-center text-sm font-medium transition-colors duration-200 lg:rounded-full lg:px-3 lg:py-1.5",
+                          active
+                            ? "text-base-content lg:after:absolute lg:after:bottom-0 lg:after:left-2 lg:after:right-2 lg:after:h-[2px] lg:after:rounded-full lg:after:bg-base-content lg:after:content-['']"
+                            : "text-base-content/70 hover:text-base-content lg:after:absolute lg:after:bottom-0 lg:after:left-2 lg:after:right-2 lg:after:h-[2px] lg:after:rounded-full lg:after:bg-base-content lg:after:scale-x-0 lg:after:transition-transform lg:after:duration-200 lg:after:content-[''] hover:lg:after:scale-x-100",
+                        ].join(" ")}
                       >
                         {link.label}
                       </Link>
@@ -99,7 +96,7 @@ export function Navbar() {
             </nav>
           </div>
 
-          <div className="navbar-end ml-auto gap-1">
+          <div className="navbar-end ml-auto mr-5 hidden items-center justify-center gap-1 lg:mr-7 lg:flex">
             <ThemeToggle />
           </div>
         </div>

@@ -136,25 +136,98 @@
     object-position: left center;
   }
 
-  html:not([data-theme="dark"]) .hero-theme-light {
+  .hero-theme-light {
     display: none !important;
   }
 
-  html:not([data-theme="dark"]) .hero-theme-light-mobile {
+  .hero-theme-light-mobile {
+    display: block !important;
+  }
+
+  .hero-theme-dark {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .hero-theme-light {
+    display: block !important;
+  }
+
+  .hero-theme-light-mobile {
+    display: none !important;
+  }
+
+  [data-theme="dark"] .hero-theme-light {
+    display: none !important;
+  }
+
+  [data-theme="dark"] .hero-theme-light-mobile {
+    display: none !important;
+  }
+
+  [data-theme="dark"] .hero-theme-dark {
+    display: block !important;
+  }
+
+  html:not([data-theme="dark"]) .hero-theme-dark {
+    display: none !important;
+  }
+}
+
+.predicaciones-theme-light {
+  display: block !important;
+}
+
+.predicaciones-theme-dark {
+  display: none !important;
+}
+
+.predicaciones-theme-mobile {
+  display: none !important;
+}
+
+@media (max-width: 639px) {
+  .predicaciones-theme-light,
+  .predicaciones-theme-dark,
+  .predicaciones-theme-mobile {
+    object-fit: cover !important;
+    object-position: center center;
+  }
+
+  .predicaciones-theme-light {
+    display: none !important;
+  }
+
+  .predicaciones-theme-dark {
+    display: none !important;
+  }
+
+  .predicaciones-theme-mobile {
     display: block !important;
   }
 }
 
-[data-theme="dark"] .hero-theme-light {
-  display: none !important;
-}
+@media (min-width: 640px) {
+  .predicaciones-theme-mobile {
+    display: none !important;
+  }
 
-[data-theme="dark"] .hero-theme-light-mobile {
-  display: none !important;
-}
+  .predicaciones-theme-light {
+    display: block !important;
+  }
 
-[data-theme="dark"] .hero-theme-dark {
-  display: block !important;
+  [data-theme="dark"] .predicaciones-theme-light {
+    display: none !important;
+  }
+
+  [data-theme="dark"] .predicaciones-theme-dark {
+    display: block !important;
+  }
+
+  html:not([data-theme="dark"]) .predicaciones-theme-dark {
+    display: none !important;
+  }
 }
 
 .hero-title {

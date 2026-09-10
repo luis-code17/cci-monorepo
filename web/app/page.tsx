@@ -54,10 +54,15 @@ export default async function HomePage() {
         imageUrlDark="/cci_sabadell_dark_background.png"
       />
 
-      <div id="home-content" className="section-shell py-6 sm:py-8 lg:py-10">
-        <section className="mt-4 sm:mt-6">
-          <VerseCard verse={verse.verse} reference={verse.reference} />
-        </section>
+      <div className="w-full py-0">
+        <VerseCard verse={verse.verse} reference={verse.reference} />
+      </div>
+
+      {latestVideos && latestVideos.length > 0 ? (
+        <PredicacionesVideos videos={latestVideos} />
+      ) : null}
+
+      <div id="home-content" className="section-shell pt-0 pb-6 sm:pb-8 lg:pb-10">
 {/* 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">
@@ -89,26 +94,8 @@ export default async function HomePage() {
         )}
       </section> */}
 
-      <section className="mt-14 flex items-end justify-between gap-4">
-        <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Videos</p>
-          <h2 className="mt-2 text-balance text-3xl font-semibold text-base-content sm:text-4xl">
-            Últimos videos y mensajes
-          </h2>
-          <p className="mt-3 max-w-2xl text-pretty text-lg leading-8 text-base-content/75">
-            Un vistazo rápido a las predicaciones y contenidos en vídeo de la iglesia.
-          </p>
-        </div>
-        <Link href="/predicaciones" className="btn btn-outline rounded-full hidden sm:inline-flex">
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          Ver todos
-        </Link>
-      </section>
-
-      <section className="mt-8">
-        {latestVideos && latestVideos.length > 0 ? (
-          <PredicacionesVideos videos={latestVideos} />
-        ) : (
+      {!latestVideos || latestVideos.length === 0 ? (
+        <section className="mt-14">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {videoPreviews.map((video) => (
               <article key={video.title} className="surface-card h-full overflow-hidden">
@@ -126,8 +113,8 @@ export default async function HomePage() {
               </article>
             ))}
           </div>
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <section className="mt-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="surface-card overflow-hidden">

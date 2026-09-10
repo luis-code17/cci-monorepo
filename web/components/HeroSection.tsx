@@ -53,8 +53,8 @@ export function HeroSection({ title, subtitle, imageUrlLight, imageUrlLightMobil
       </div>
 
       <a
-        href="#home-content"
-        aria-label="Desplazarse al contenido"
+        href="#verse-of-the-day"
+        aria-label="Desplazarse al versículo del día"
         className="absolute bottom-7 right-6 z-10 text-white/85 transition-colors hover:text-white sm:left-1/2 sm:right-auto sm:-translate-x-1/2"
       >
         <ChevronDown className="h-9 w-9 animate-bounce" strokeWidth={1.5} aria-hidden="true" />

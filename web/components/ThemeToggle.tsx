@@ -53,7 +53,7 @@ export function ThemeToggle() {
 
   return (
     <label
-      className="swap swap-rotate btn btn-ghost btn-circle border border-base-200/70 bg-base-100/70 text-base-content shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:bg-base-200/80"
+      className="swap swap-rotate btn btn-ghost btn-circle h-9 min-h-9 w-9 min-w-9 rounded-full border border-base-content/10 bg-base-100/70 text-base-content shadow-sm backdrop-blur-sm transition-transform duration-200 hover:scale-105 lg:border-base-content/10 lg:bg-base-100/70 lg:shadow-sm lg:backdrop-blur-sm"
       aria-label="Cambiar tema"
       title="Cambiar tema"
     >
