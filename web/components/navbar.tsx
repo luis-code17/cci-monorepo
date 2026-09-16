@@ -54,21 +54,13 @@ export function Navbar() {
       }`}
     >
       <div className="section-shell">
-        <div className="navbar relative mt-3 min-h-0 px-0 py-2.5">
-          <div className="navbar-start gap-2 lg:w-auto lg:flex-1">
-            <label
-              htmlFor="site-drawer"
-              className="btn btn-ghost btn-circle border border-base-content/10 bg-base-100/60 text-base-content shadow-sm backdrop-blur-sm lg:hidden"
-              aria-label="Abrir menú"
-            >
-              <Menu className="h-5 w-5" aria-hidden="true" />
-            </label>
-          </div>
+        <div className="navbar relative mt-3 min-h-14 px-0 py-2.5">
+          <div className="navbar-start lg:w-auto lg:flex-1" />
 
-          <div className="navbar-center absolute left-1/2 hidden -translate-x-1/2 lg:flex">
+          <div className="navbar-center absolute right-0 flex translate-x-0 items-center gap-2 lg:left-1/2 lg:right-auto lg:-translate-x-1/2">
             <nav
               aria-label="Principal"
-              className="lg:rounded-full lg:border lg:border-base-content/10 lg:bg-base-100/70 lg:px-3 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-sm"
+              className="hidden lg:block lg:rounded-full lg:border lg:border-base-content/10 lg:bg-base-100/70 lg:px-3 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-sm"
             >
               <ul className="menu menu-horizontal items-center gap-2 px-1 text-sm lg:gap-2">
                 {links.map((link) => {
@@ -94,11 +86,17 @@ export function Navbar() {
                 })}
               </ul>
             </nav>
-          </div>
-
-          <div className="navbar-end ml-auto mr-5 hidden items-center justify-center gap-1 lg:mr-7 lg:flex">
+            <label
+              htmlFor="site-drawer"
+              className="btn btn-ghost btn-circle border border-base-content/10 bg-base-100/60 text-base-content shadow-sm backdrop-blur-sm lg:hidden"
+              aria-label="Abrir menú"
+            >
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            </label>
             <ThemeToggle />
           </div>
+
+          <div className="navbar-end hidden" />
         </div>
       </div>
     </header>

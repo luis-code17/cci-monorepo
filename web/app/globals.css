@@ -120,113 +120,44 @@
   --font-cormorant: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 }
 
-.hero-theme-dark {
-  display: none !important;
-}
-
-.hero-theme-light-mobile {
-  display: none !important;
-}
-
-@media (max-width: 639px) {
-  .hero-theme-light,
-  .hero-theme-light-mobile,
-  .hero-theme-dark {
-    object-fit: cover !important;
-    object-position: left center;
-  }
-
-  .hero-theme-light {
-    display: none !important;
-  }
-
-  .hero-theme-light-mobile {
-    display: block !important;
-  }
-
-  .hero-theme-dark {
-    display: none !important;
-  }
-}
-
-@media (min-width: 640px) {
-  .hero-theme-light {
-    display: block !important;
-  }
-
-  .hero-theme-light-mobile {
-    display: none !important;
-  }
-
-  [data-theme="dark"] .hero-theme-light {
-    display: none !important;
-  }
-
-  [data-theme="dark"] .hero-theme-light-mobile {
-    display: none !important;
-  }
-
-  [data-theme="dark"] .hero-theme-dark {
-    display: block !important;
-  }
-
-  html:not([data-theme="dark"]) .hero-theme-dark {
-    display: none !important;
-  }
-}
-
-.predicaciones-theme-light {
-  display: block !important;
-}
-
-.predicaciones-theme-dark {
-  display: none !important;
-}
-
-.predicaciones-theme-mobile {
+.section-theme-dark,
+.section-theme-mobile,
+.section-theme-mobile-dark {
   display: none !important;
 }
 
 @media (max-width: 639px) {
-  .predicaciones-theme-light,
-  .predicaciones-theme-dark,
-  .predicaciones-theme-mobile {
-    object-fit: cover !important;
-    object-position: center center;
-  }
-
-  .predicaciones-theme-light {
+  .section-theme-light,
+  .section-theme-dark {
     display: none !important;
   }
 
-  .predicaciones-theme-dark {
-    display: none !important;
-  }
-
-  .predicaciones-theme-mobile {
+  .section-theme-mobile {
     display: block !important;
+    object-position: var(--section-mobile-position, center center) !important;
+  }
+
+  [data-theme="dark"] .section-theme-mobile {
+    display: none !important;
+  }
+
+  [data-theme="dark"] .section-theme-mobile-dark {
+    display: block !important;
+    object-position: var(--section-mobile-position, center center) !important;
   }
 }
 
 @media (min-width: 640px) {
-  .predicaciones-theme-mobile {
-    display: none !important;
-  }
-
-  .predicaciones-theme-light {
+  .section-theme-light {
     display: block !important;
   }
 
-  [data-theme="dark"] .predicaciones-theme-light {
+  [data-theme="dark"] .section-theme-light {
     display: none !important;
   }
 
-  [data-theme="dark"] .predicaciones-theme-dark {
+  [data-theme="dark"] .section-theme-dark {
     display: block !important;
-  }
-
-  html:not([data-theme="dark"]) .predicaciones-theme-dark {
-    display: none !important;
   }
 }
 

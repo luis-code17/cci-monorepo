@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { Section } from "@/components/Section";
 import { HeroSection } from "@/components/HeroSection";
 import { VerseCard } from "@/components/verse-card";
 import { BlogCard } from "@/components/blog-card";
@@ -55,11 +55,11 @@ export default async function HomePage() {
       />
 
       <div className="w-full py-0">
-        <VerseCard verse={verse.verse} reference={verse.reference} />
+        <VerseCard verse={verse.verse} reference={verse.reference} nextSectionId={latestVideos.length > 0 ? "#predicaciones-section" : undefined} />
       </div>
 
       {latestVideos && latestVideos.length > 0 ? (
-        <PredicacionesVideos videos={latestVideos} />
+        <PredicacionesVideos videos={latestVideos} nextSectionId="#home-content" />
       ) : null}
 
       <div id="home-content" className="section-shell pt-0">
@@ -117,37 +117,23 @@ export default async function HomePage() {
       ) : null}
       </div>
 
-      <section className="relative min-h-svh w-full overflow-hidden">
-        <Image
-          src="/conocenos.jpeg"
-          alt="Comunidad de CCI Sabadell"
-          fill
-          sizes="100vw"
-          className="hidden object-cover md:block"
-        />
-        <Image
-          src="/conocenos_mobile_crop.jpg"
-          alt="Comunidad de CCI Sabadell"
-          fill
-          sizes="100vw"
-          className="block object-cover md:hidden"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20" />
-
-        <div className="section-shell relative z-10 flex min-h-svh items-end py-8 text-white sm:py-12 lg:py-16">
-          <div className="max-w-2xl space-y-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/70">Sobre Nosotros</p>
-            <h2 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">Conoce la iglesia</h2>
-            <p className="text-base leading-7 text-white/85 sm:text-lg">
-              Somos Uno: una comunidad cristiana y un lugar de nuevos comienzos, centrado en la fe, la enseñanza bíblica y la vida compartida. Nuestro propósito es acercar a las personas a Dios, fortalecer la vida espiritual y compartir esperanza a través de Jesucristo.
-            </p>
-            <Link href="/about" className="btn btn-primary rounded-full">
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              Conócenos
-            </Link>
-          </div>
+      <Section
+        eyebrow="Sobre Nosotros"
+        title="Conoce la iglesia"
+        background={{ light: "/conocenos.jpeg", mobile: "/conocenos_mobile_crop.jpg", alt: "Comunidad de CCI Sabadell" }}
+        contentClassName="text-white"
+        overlayClassName="bg-gradient-to-r from-black/85 via-black/60 to-black/35"
+      >
+        <div className="mx-auto mt-4 flex w-full max-w-2xl flex-1 -translate-y-8 flex-col justify-center space-y-6 text-center">
+          <p className="font-sans text-[clamp(1.2rem,2vw,1.5rem)] leading-8 text-white/90 sm:leading-9">
+            Somos Uno: una comunidad cristiana y un lugar de nuevos comienzos, centrado en la fe, la enseñanza bíblica y la vida compartida. Nuestro propósito es acercar a las personas a Dios, fortalecer la vida espiritual y compartir esperanza a través de Jesucristo.
+          </p>
+          <Link href="/about" className="btn btn-primary rounded-full">
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Conócenos
+          </Link>
         </div>
-      </section>
+      </Section>
     </>
   );
 }

@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDown, ArrowRight, PlayCircle, X } from "lucide-react";
+import { ArrowRight, PlayCircle, X } from "lucide-react";
+import { Section } from "@/components/Section";
 import type { YouTubeVideo } from "@/lib/youtube";
 
 type PredicacionesVideosProps = {
   videos: YouTubeVideo[];
+  nextSectionId?: string;
 };
 
 function formatDateEs(value: string) {
@@ -32,7 +34,7 @@ function getEmbedUrl(videoId: string) {
   return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 }
 
-export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
+export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVideosProps) {
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
   const activeVideo = useMemo(
     () => videos.find((video) => video.id === activeVideoId) ?? null,
@@ -58,46 +60,17 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
 
   return (
     <>
-      <section id="predicaciones-section" className="relative w-full overflow-x-hidden shadow-[0_25px_80px_-35px_rgba(15,23,42,0.75)]">
-        <Image
-          src="/predicaciones.jpeg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="predicaciones-theme-light hidden object-cover md:block"
-        />
-        <Image
-          src="/predicaciones_mobile.jpeg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="predicaciones-theme-mobile block object-cover md:hidden"
-        />
-        <Image
-          src="/predicaciones_dark.jpeg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="predicaciones-theme-dark hidden object-cover md:block"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/55" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/15" />
-
-        <div className="relative z-10 flex min-h-[100svh] flex-col px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
-          <div className="mx-auto mt-4 w-full max-w-7xl flex flex-col gap-4 md:mt-8 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-xl">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/70">Predicaciones</p>
-              <h2 className="mt-2 text-balance text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
-                Predicaciones y mensajes
-              </h2>
-            </div>
-          </div>
-
-          <div className="mx-auto flex w-full flex-1 flex-col justify-center">
+      <Section
+        id="predicaciones-section"
+        eyebrow="Predicaciones"
+        title="Predicaciones y mensajes"
+        background={{ light: "/predicaciones.jpeg", dark: "/predicaciones_dark.jpeg", mobile: "/predicaciones_mobile.jpeg" }}
+        arrow={nextSectionId ? { href: nextSectionId, label: "Desplazarse al siguiente contenido" } : undefined}
+        priority
+        className="shadow-[0_25px_80px_-35px_rgba(15,23,42,0.75)]"
+        overlayClassName="bg-gradient-to-r from-black/85 via-black/70 to-black/55 bg-linear-to-t from-black/40 via-transparent to-black/15"
+      >
+          <div className="relative mx-auto flex w-full flex-1 flex-col justify-center">
             <div className="mx-auto hidden w-full max-w-5xl items-stretch gap-3 md:grid md:grid-cols-3">
             {featuredVideos.map((video) => {
               const hasTags = video.tags.length > 0;
@@ -165,7 +138,7 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
             })}
             </div>
 
-            <div className="mt-6 block md:hidden">
+            <div className="mt-6 block pb-16 md:hidden">
               {featuredVideos.slice(0, 1).map((video) => {
                 const dateText = formatDateEs(video.publishedAt) || "Vídeo reciente";
 
@@ -203,9 +176,8 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
                   </article>
                 );
               })}
+              <p className="mt-4 text-center text-xs uppercase tracking-[0.3em] text-white/70">Última predicación</p>
             </div>
-          </div>
-
           <div className="flex justify-center pb-12 pt-6">
             <Link href="/predicaciones" className="btn btn-primary btn-sm rounded-full sm:btn-md">
               Ver todas
@@ -214,14 +186,7 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
           </div>
         </div>
 
-        <a
-          href="#home-content"
-          aria-label="Desplazarse al siguiente contenido"
-          className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 text-white/80 transition-colors hover:text-white"
-        >
-          <ArrowDown className="h-8 w-8 animate-bounce" strokeWidth={1.5} aria-hidden="true" />
-        </a>
-      </section>
+      </Section>
 
       <dialog className={`modal ${activeVideo ? "modal-open" : ""}`} open={Boolean(activeVideo)} onClose={() => setActiveVideoId(null)}>
         <div className="modal-box w-11/12 max-w-5xl overflow-hidden p-0 shadow-2xl">
