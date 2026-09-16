@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "CCI Sabadell - Centro Cristiano Internacional",
-  description: "Una comunidad cristiana moderna enfocada en la fe, enseñanza bíblica y vida en comunidad. Bienvenidos a CCI Sabadell.",
+  description: "Un Lugar de Nuevos Comienzos, donde Somos Uno en la fe, la enseñanza bíblica y la vida en comunidad.",
 };
 
 const videoPreviews = [
@@ -48,7 +48,7 @@ export default async function HomePage() {
     <>
       <HeroSection
         title="Bienvenidos a CCI Sabadell"
-        subtitle="Un lugar de fe, comunidad y esperanza."
+        subtitle="Un Lugar de Nuevos Comienzos"
         imageUrlLight="/cci_sabadell_light_background.png"
         imageUrlLightMobile="/cci_sabadell_light_background_mb.png"
         imageUrlDark="/cci_sabadell_dark_background.png"
@@ -62,7 +62,7 @@ export default async function HomePage() {
         <PredicacionesVideos videos={latestVideos} />
       ) : null}
 
-      <div id="home-content" className="section-shell pt-0 pb-6 sm:pb-8 lg:pb-10">
+      <div id="home-content" className="section-shell pt-0">
 {/* 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">
@@ -115,37 +115,39 @@ export default async function HomePage() {
           </div>
         </section>
       ) : null}
+      </div>
 
-      <section className="mt-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="surface-card overflow-hidden">
-          <figure className="relative aspect-4/3">
-            <Image
-              src="/pastor.jpg"
-              alt="Pastor de CCI Sabadell"
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover"
-            />
-          </figure>
-        </div>
+      <section className="relative min-h-svh w-full overflow-hidden">
+        <Image
+          src="/conocenos.jpeg"
+          alt="Comunidad de CCI Sabadell"
+          fill
+          sizes="100vw"
+          className="hidden object-cover md:block"
+        />
+        <Image
+          src="/conocenos_mobile_crop.jpg"
+          alt="Comunidad de CCI Sabadell"
+          fill
+          sizes="100vw"
+          className="block object-cover md:hidden"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20" />
 
-        <div className="surface-card bg-base-200/55">
-          <div className="space-y-6 p-6 sm:p-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Sobre Nosotros</p>
-            <h2 className="text-balance text-3xl font-semibold sm:text-4xl">Conoce la iglesia</h2>
-            <p className="text-base leading-7 text-base-content/75 sm:text-lg">
-              Somos una comunidad cristiana enfocada en la fe, la enseñanza bíblica y la vida en comunidad. Nuestro propósito es acercar a las personas a Dios, fortalecer la vida espiritual y compartir esperanza a través de Jesucristo.
+        <div className="section-shell relative z-10 flex min-h-svh items-end py-8 text-white sm:py-12 lg:py-16">
+          <div className="max-w-2xl space-y-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/70">Sobre Nosotros</p>
+            <h2 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">Conoce la iglesia</h2>
+            <p className="text-base leading-7 text-white/85 sm:text-lg">
+              Somos Uno: una comunidad cristiana y un lugar de nuevos comienzos, centrado en la fe, la enseñanza bíblica y la vida compartida. Nuestro propósito es acercar a las personas a Dios, fortalecer la vida espiritual y compartir esperanza a través de Jesucristo.
             </p>
-            <div>
-              <Link href="/about" className="btn btn-primary rounded-full">
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                Ver todos
-              </Link>
-            </div>
+            <Link href="/about" className="btn btn-primary rounded-full">
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              Conócenos
+            </Link>
           </div>
         </div>
       </section>
-      </div>
     </>
   );
 }

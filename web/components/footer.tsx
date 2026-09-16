@@ -17,7 +17,7 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-base-200/80 bg-base-100">
+    <footer className="border-t-2 border-base-content/60 bg-base-100">
       <div className="section-shell py-12 sm:py-14 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.9fr]">
           <section className="space-y-5">
@@ -118,7 +118,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-base-200/80 pt-6 text-sm text-base-content/60 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} CCI Sabadell. Todos los derechos reservados.</p>
-          <p>Fe, comunidad y esperanza.</p>
+          <p>Un Lugar de Nuevos Comienzos.</p>
         </div>
       </div>
     </footer>

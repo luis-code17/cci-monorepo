@@ -87,7 +87,7 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/55" />
         <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/15" />
 
-        <div className="relative z-10 flex min-h-[100svh] flex-col justify-start px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+        <div className="relative z-10 flex min-h-[100svh] flex-col px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
           <div className="mx-auto mt-4 w-full max-w-7xl flex flex-col gap-4 md:mt-8 md:flex-row md:items-end md:justify-between">
             <div className="max-w-xl">
               <p className="text-xs uppercase tracking-[0.3em] text-white/70">Predicaciones</p>
@@ -95,14 +95,10 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
                 Predicaciones y mensajes
               </h2>
             </div>
-
-            <Link href="/predicaciones" className="btn btn-primary btn-sm rounded-full w-fit sm:btn-md">
-              Ver todas
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
           </div>
 
-          <div className="mx-auto mt-28 hidden w-full max-w-5xl items-stretch gap-3 md:grid md:grid-cols-3">
+          <div className="mx-auto flex w-full flex-1 flex-col justify-center">
+            <div className="mx-auto hidden w-full max-w-5xl items-stretch gap-3 md:grid md:grid-cols-3">
             {featuredVideos.map((video) => {
               const hasTags = video.tags.length > 0;
               const dateText = formatDateEs(video.publishedAt) || "Vídeo reciente";
@@ -167,46 +163,54 @@ export function PredicacionesVideos({ videos }: PredicacionesVideosProps) {
                 </article>
               );
             })}
+            </div>
+
+            <div className="mt-6 block md:hidden">
+              {featuredVideos.slice(0, 1).map((video) => {
+                const dateText = formatDateEs(video.publishedAt) || "Vídeo reciente";
+
+                return (
+                  <article key={video.id} className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/20 shadow-lg backdrop-blur-sm">
+                    <button
+                      type="button"
+                      onClick={() => setActiveVideoId(video.id)}
+                      className="relative block w-full text-left"
+                      aria-label={`Reproducir ${video.title}`}
+                    >
+                      <figure className="relative aspect-[16/11] overflow-hidden">
+                        <Image
+                          src={video.thumbnail}
+                          alt={video.title}
+                          fill
+                          sizes="100vw"
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
+                        <div className="absolute left-4 top-4 rounded-full bg-base-100/90 px-3 py-1 text-[0.65rem] font-medium text-base-content shadow-sm">
+                          {video.durationLabel || "Vídeo"}
+                        </div>
+                      </figure>
+                    </button>
+
+                    <div className="space-y-3 p-4 text-white">
+                      <p className="text-[0.65rem] uppercase tracking-[0.24em] text-white/60">{dateText}</p>
+                      <h3 className="text-xl font-semibold leading-tight text-white">{video.title}</h3>
+                      <button type="button" onClick={() => setActiveVideoId(video.id)} className="btn btn-primary btn-sm rounded-full w-full">
+                        Ver video
+                        <PlayCircle className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="mt-6 block md:hidden">
-            {featuredVideos.slice(0, 1).map((video) => {
-              const dateText = formatDateEs(video.publishedAt) || "Vídeo reciente";
-
-              return (
-                <article key={video.id} className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/20 shadow-lg backdrop-blur-sm">
-                  <button
-                    type="button"
-                    onClick={() => setActiveVideoId(video.id)}
-                    className="relative block w-full text-left"
-                    aria-label={`Reproducir ${video.title}`}
-                  >
-                    <figure className="relative aspect-[16/11] overflow-hidden">
-                      <Image
-                        src={video.thumbnail}
-                        alt={video.title}
-                        fill
-                        sizes="100vw"
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
-                      <div className="absolute left-4 top-4 rounded-full bg-base-100/90 px-3 py-1 text-[0.65rem] font-medium text-base-content shadow-sm">
-                        {video.durationLabel || "Vídeo"}
-                      </div>
-                    </figure>
-                  </button>
-
-                  <div className="space-y-3 p-4 text-white">
-                    <p className="text-[0.65rem] uppercase tracking-[0.24em] text-white/60">{dateText}</p>
-                    <h3 className="text-xl font-semibold leading-tight text-white">{video.title}</h3>
-                    <button type="button" onClick={() => setActiveVideoId(video.id)} className="btn btn-primary btn-sm rounded-full w-full">
-                      Ver video
-                      <PlayCircle className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
+          <div className="flex justify-center pb-12 pt-6">
+            <Link href="/predicaciones" className="btn btn-primary btn-sm rounded-full sm:btn-md">
+              Ver todas
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
         </div>
 
