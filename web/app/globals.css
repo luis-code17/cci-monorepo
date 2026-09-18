@@ -174,6 +174,7 @@
 }
 
 html {
+  background-color: var(--color-base-100);
   scroll-behavior: smooth;
 }
 
@@ -200,13 +201,13 @@ body {
   min-height: 100dvh;
 }
 
-.route-background::before {
-  content: "";
+.route-background-layer {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   width: 100%;
-  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   pointer-events: none;
   background-image: url("/fondo_pc_light.png");
   background-position: center top;
@@ -214,16 +215,16 @@ body {
   background-size: cover;
 }
 
-[data-theme="dark"] .route-background::before {
+[data-theme="dark"] .route-background-layer {
   background-image: url("/fondo_pc_dark.png");
 }
 
 @media (max-width: 639px) {
-  .route-background::before {
+  .route-background-layer {
     background-image: url("/fondo_mobile_light.png");
   }
 
-  [data-theme="dark"] .route-background::before {
+  [data-theme="dark"] .route-background-layer {
     background-image: url("/fondo_mobile_dark.png");
   }
 }

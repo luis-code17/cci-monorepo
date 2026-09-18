@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { X } from "lucide-react";
-import { BrandMark } from "@/components/brand-mark";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { RouteBackground } from "@/components/route-background";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { getSiteUrl } from "@/lib/env";
 import { DEFAULT_THEME } from "@/lib/theme";
 import { MobileMenu } from "@/components/mobile-menu";
@@ -35,6 +31,12 @@ export const metadata: Metadata = {
     shortcut: "/cci_flame_favicon_512x512.png",
     apple: "/cci_flame_favicon_512x512.png",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
