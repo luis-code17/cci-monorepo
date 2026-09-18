@@ -31,7 +31,7 @@ export function MobileMenu() {
         className="drawer-overlay bg-base-content/10"
       />
 
-      <div className="relative flex min-h-screen w-full flex-col items-center bg-base-100/30 px-6 py-16 text-base-content shadow-2xl backdrop-blur-sm">
+      <div className="relative flex min-h-dvh w-full flex-col items-center bg-base-100/30 px-6 py-16 text-base-content shadow-2xl backdrop-blur-sm">
         {/* Botón X */}
         <label
           htmlFor="site-drawer"

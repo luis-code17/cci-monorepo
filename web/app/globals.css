@@ -179,6 +179,7 @@ html {
 
 html,
 body {
+  min-height: 100%;
   transition:
     background-color 240ms ease,
     color 240ms ease,
@@ -194,24 +195,35 @@ body {
 }
 
 .route-background {
-  min-height: 100%;
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+}
+
+.route-background::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100dvh;
+  pointer-events: none;
   background-image: url("/fondo_pc_light.png");
   background-position: center top;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
 }
 
-[data-theme="dark"] .route-background {
+[data-theme="dark"] .route-background::before {
   background-image: url("/fondo_pc_dark.png");
 }
 
 @media (max-width: 639px) {
-  .route-background {
+  .route-background::before {
     background-image: url("/fondo_mobile_light.png");
   }
 
-  [data-theme="dark"] .route-background {
+  [data-theme="dark"] .route-background::before {
     background-image: url("/fondo_mobile_dark.png");
   }
 }

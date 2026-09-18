@@ -50,15 +50,15 @@ export default function RootLayout({
       className="h-full antialiased"
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-base-100 text-base-content">
+      <body className="min-h-dvh bg-base-100 text-base-content">
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('cci-theme');if(t!=='light'&&t!=='dark'){t='${DEFAULT_THEME}'}document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;localStorage.setItem('cci-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','${DEFAULT_THEME}');document.documentElement.style.colorScheme='${DEFAULT_THEME}';}})();`}
         </Script>
-        <div className="drawer drawer-end min-h-screen">
+        <div className="drawer drawer-end min-h-dvh">
           <input id="site-drawer" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content flex min-h-screen flex-col text-base-content">
+          <div className="drawer-content flex min-h-dvh flex-col text-base-content">
             <Navbar />
-            <main className="flex-1">
+            <main className="flex flex-1 flex-col">
               <RouteBackground>{children}</RouteBackground>
             </main>
             <Footer />
