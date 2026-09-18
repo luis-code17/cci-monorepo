@@ -9,6 +9,7 @@ import { RouteBackground } from "@/components/route-background";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { getSiteUrl } from "@/lib/env";
 import { DEFAULT_THEME } from "@/lib/theme";
+import { MobileMenu } from "@/components/mobile-menu";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
@@ -62,51 +63,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
-          <div className="drawer-side z-50">
-            <label htmlFor="site-drawer" aria-label="Cerrar menú" className="drawer-overlay bg-base-content/10" />
-            <div className="relative flex min-h-screen w-full flex-col items-center bg-base-100/30 px-6 py-16 text-base-content shadow-2xl backdrop-blur-sm">
-              <label
-                htmlFor="site-drawer"
-                className="btn btn-ghost btn-circle absolute right-5 top-5 text-base-content"
-                aria-label="Cerrar menú"
-              >
-                <X className="h-6 w-6" aria-hidden="true" />
-              </label>
-              <Link href="/" className="shrink-0" aria-label="CCI Sabadell">
-                <BrandMark size="lg" className="h-24 w-auto" />
-              </Link>
-
-              <nav aria-label="Menú móvil" className="flex flex-1 items-center justify-center">
-                <ul className="flex flex-col items-center gap-5 text-center">
-                  <li>
-                    <Link href="/" className="text-2xl font-semibold text-base-content transition-opacity hover:opacity-70">
-                      Inicio
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/predicaciones" className="text-2xl font-semibold text-base-content transition-opacity hover:opacity-70">
-                      Predicaciones
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/about" className="text-2xl font-semibold text-base-content transition-opacity hover:opacity-70">
-                      Sobre Nosotros
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/ofrendas" className="text-2xl font-semibold text-base-content transition-opacity hover:opacity-70">
-                      Ofrendas y Diezmos
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="flex shrink-0 flex-col items-center gap-2">
-                <span className="text-xs font-medium uppercase tracking-[0.3em] text-base-content/55">Tema</span>
-                <ThemeToggle />
-              </div>
-            </div>
-          </div>
+          <MobileMenu />
         </div>
       </body>
     </html>
