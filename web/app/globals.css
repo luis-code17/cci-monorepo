@@ -193,6 +193,30 @@ body {
     var(--color-base-100);
 }
 
+.route-background {
+  min-height: 100%;
+  background-image: url("/fondo_pc_light.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] .route-background {
+  background-image: url("/fondo_pc_dark.png");
+}
+
+@media (max-width: 639px) {
+  .route-background {
+    background-image: url("/fondo_mobile_light.png");
+    background-attachment: scroll;
+  }
+
+  [data-theme="dark"] .route-background {
+    background-image: url("/fondo_mobile_dark.png");
+  }
+}
+
 h1,
 h2,
 h3,
