@@ -8,7 +8,7 @@ type DonationHeroProps = {
 
 export function DonationHero({ title, subtitle, imageUrl }: DonationHeroProps) {
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-base-200/50 bg-base-100">
+    <section className="relative overflow-hidden rounded-3xl border border-base-content/20 bg-base-content/10 shadow-sm backdrop-blur-2xl">
       {/* Background image with overlay */}
       {imageUrl && (
         <div className="absolute inset-0">

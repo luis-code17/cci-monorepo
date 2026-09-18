@@ -71,19 +71,21 @@ function getDurationSeconds(entry: Record<string, unknown>) {
   if (!entry || typeof entry !== "object") return null;
 
   // Common YouTube RSS shape: { duration: { '@_seconds': '123' } }
-  const maybe = (entry as Record<string, any>).duration ?? (entry as Record<string, any>)["yt:duration"];
+  const maybe = entry.duration ?? entry["yt:duration"];
 
   if (maybe && typeof maybe === "object") {
-    const seconds = maybe["@_seconds"] ?? maybe["@_duration"] ?? maybe.seconds ?? maybe.duration;
+    const duration = maybe as Record<string, unknown>;
+    const seconds = duration["@_seconds"] ?? duration["@_duration"] ?? duration.seconds ?? duration.duration;
     const n = Number(seconds);
     if (!Number.isNaN(n) && n > 0) return n;
   }
 
   // Fallback: scan first-level children for '@_seconds' attribute
   for (const key of Object.keys(entry)) {
-    const child = (entry as Record<string, any>)[key];
+    const child = entry[key];
     if (child && typeof child === "object") {
-      const sec = child["@_seconds"] ?? child["@_duration"];
+      const childRecord = child as Record<string, unknown>;
+      const sec = childRecord["@_seconds"] ?? childRecord["@_duration"];
       const n = Number(sec);
       if (!Number.isNaN(n) && n > 0) return n;
     }
@@ -226,7 +228,7 @@ export function extractYouTubeChannelIdFromUrl(input: string) {
 }
 
 export const getLatestVideos = cache(async function getLatestVideos(maxResults = 6) {
-  const limit = Math.min(Math.max(maxResults, 1), 12);
+  const limit = Math.min(Math.max(maxResults, 1), 15);
   const feed = await fetchYouTubeFeed();
   const videos = feed ? normalizeEntries(feed).slice(0, limit) : [];
 

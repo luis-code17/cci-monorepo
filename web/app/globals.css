@@ -9,18 +9,18 @@
   default: false;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: oklch(97% 0.0035 67.78);
-  --color-base-200: oklch(95% 0.0081 61.42);
-  --color-base-300: oklch(90% 0.0081 61.42);
-  --color-base-content: oklch(40% 0.0081 61.42);
-  --color-primary: oklch(23.27% 0.0249 284.3);
-  --color-primary-content: oklch(94.22% 0.2505 117.44);
-  --color-secondary: oklch(23.27% 0.0249 284.3);
-  --color-secondary-content: oklch(73.92% 0.2135 50.94);
-  --color-accent: oklch(23.27% 0.0249 284.3);
-  --color-accent-content: oklch(88.92% 0.2061 189.9);
-  --color-neutral: oklch(20% 0 0);
-  --color-neutral-content: oklch(80% 0.0081 61.42);
+  --color-base-100: oklch(98% 0.005 250);
+  --color-base-200: oklch(94% 0.012 250);
+  --color-base-300: oklch(88% 0.022 250);
+  --color-base-content: oklch(32% 0.12 250);
+  --color-primary: oklch(45% 0.16 250);
+  --color-primary-content: oklch(98% 0 0);
+  --color-secondary: oklch(38% 0.1 220);
+  --color-secondary-content: oklch(98% 0 0);
+  --color-accent: oklch(52% 0.13 195);
+  --color-accent-content: oklch(22% 0.08 240);
+  --color-neutral: oklch(25% 0.04 250);
+  --color-neutral-content: oklch(98% 0 0);
   --color-info: oklch(80.39% 0.1148 241.68);
   --color-info-content: oklch(30.39% 0.1148 241.68);
   --color-success: oklch(83.92% 0.0901 136.87);
@@ -209,7 +209,6 @@ body {
 @media (max-width: 639px) {
   .route-background {
     background-image: url("/fondo_mobile_light.png");
-    background-attachment: scroll;
   }
 
   [data-theme="dark"] .route-background {
@@ -240,11 +239,11 @@ h4 {
   }
 
   .surface-card {
-    @apply rounded-[1.75rem] border border-base-200 bg-base-100 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.18)] transition-all duration-300;
+    @apply rounded-2xl border border-base-content/20 bg-base-content/10 shadow-sm backdrop-blur-2xl transition-all duration-300;
   }
 
   .surface-card:hover {
-    @apply -translate-y-0.5 shadow-[0_24px_70px_-22px_rgba(0,0,0,0.22)];
+    @apply -translate-y-0.5 bg-base-content/15 shadow-lg;
   }
 
   .soft-divider {

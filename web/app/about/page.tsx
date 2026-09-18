@@ -39,7 +39,7 @@ const facts = [
 export default function AboutPage() {
   return (
     <div className="section-shell py-10 sm:py-12 lg:py-16">
-      <section className="surface-card relative overflow-hidden px-6 py-10 sm:px-8 sm:py-12 lg:px-10">
+      <section className="relative overflow-hidden rounded-2xl border border-base-content/20 bg-base-content/10 px-6 py-10 shadow-sm backdrop-blur-2xl sm:px-8 sm:py-12 lg:px-10">
         <div className="absolute -left-20 top-0 h-44 w-44 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-secondary/10 blur-3xl" />
 
@@ -52,7 +52,7 @@ export default function AboutPage() {
 
           <div className="mt-6 flex flex-wrap gap-2">
             {facts.map((fact) => (
-              <span key={fact} className="rounded-full border border-base-300 bg-base-100 px-3 py-1.5 text-xs text-base-content/65">
+              <span key={fact} className="rounded-full border border-base-content/20 bg-base-content/10 px-3 py-1.5 text-xs text-base-content/65 backdrop-blur-xl">
                 {fact}
               </span>
             ))}
@@ -62,7 +62,7 @@ export default function AboutPage() {
 
       <section className="mt-8 grid gap-6 lg:grid-cols-[1.02fr_0.98fr]">
         <div className="grid gap-6">
-          <article className="surface-card overflow-hidden">
+          <article className="overflow-hidden rounded-2xl border border-base-content/20 bg-base-content/10 shadow-sm backdrop-blur-2xl">
             <div className="relative aspect-[16/10]">
               <Image
                 src="/pastor.jpg"
@@ -83,7 +83,7 @@ export default function AboutPage() {
         </div>
 
         <aside className="flex h-full flex-col gap-6">
-          <article className="surface-card p-6 sm:p-7">
+          <article className="rounded-2xl border border-base-content/20 bg-base-content/10 p-6 shadow-sm backdrop-blur-2xl sm:p-7">
             <p className="text-[11px] uppercase tracking-[0.28em] text-base-content/45">Información</p>
 
             <dl className="mt-4 space-y-4">
@@ -112,7 +112,7 @@ export default function AboutPage() {
             </dl>
           </article>
 
-          <article className="surface-card mt-auto p-6 sm:p-7">
+          <article className="mt-auto rounded-2xl border border-base-content/20 bg-base-content/10 p-6 shadow-sm backdrop-blur-2xl sm:p-7">
             <p className="text-[11px] uppercase tracking-[0.28em] text-base-content/45">Redes</p>
             <h3 className="mt-3 text-xl font-semibold sm:text-2xl">Síguenos y conéctate</h3>
             <p className="mt-2 max-w-md text-sm leading-7 text-base-content/70">
@@ -129,7 +129,7 @@ export default function AboutPage() {
                     href={link.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex w-full items-center gap-3 rounded-xl border border-base-300 bg-base-100 px-4 py-3 text-sm text-base-content/75 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:text-base-content hover:shadow-sm"
+                    className="group flex w-full items-center gap-3 rounded-xl border border-base-content/20 bg-base-content/10 px-4 py-3 text-sm text-base-content/75 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:bg-base-content/15 hover:text-base-content hover:shadow-sm"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-base-200 text-base-content/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                       <Icon className="h-4 w-4" />
