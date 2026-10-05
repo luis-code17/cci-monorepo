@@ -97,7 +97,7 @@ export function Section({
 
       <div className={`absolute inset-0 ${overlayClassName}`} />
 
-      <div className={`relative z-10 flex min-h-svh w-full flex-col px-6 py-12 sm:px-10 sm:py-16 lg:px-16 lg:py-20 ${contentClassName}`}>
+      <div className={`relative z-10 flex min-h-svh w-full flex-col px-6 py-8 sm:px-10 sm:py-16 lg:px-16 lg:py-20 ${contentClassName}`}>
         {title ? (
           <header className={`mx-auto w-full max-w-7xl ${headerClassName}`}>
             {eyebrow ? <p className="text-xs uppercase tracking-[0.3em] text-white/70">{eyebrow}</p> : null}

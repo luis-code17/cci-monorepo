@@ -87,7 +87,7 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
             ))}
             </div>
 
-            <div className="mt-6 block pb-16 md:hidden">
+            <div className="mt-4 block pb-10 md:hidden">
               {featuredVideos.slice(0, 1).map((video) => (
                 <YouTubeVideoCard
                   key={video.id}
@@ -98,7 +98,7 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
               ))}
               <p className="mt-4 text-center text-xs uppercase tracking-[0.3em] text-white/70">Última predicación</p>
             </div>
-          <div className="flex justify-center pb-12 pt-6">
+          <div className="flex justify-center pb-8 pt-4 md:pb-12 md:pt-6">
             <Link href="/predicaciones" className="btn btn-primary btn-sm rounded-full sm:btn-md">
               Ver todas
               <ArrowRight className="h-4 w-4" aria-hidden="true" />

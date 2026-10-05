@@ -77,3 +77,19 @@ test("desktop navigation replaces the mobile menu from 900 pixels", async ({ pag
   }));
   expect(widths.document).toBeLessThanOrEqual(widths.viewport);
 });
+
+test("section navigation arrows fit a short mobile viewport", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile-chromium", "Short viewport regression check runs on mobile");
+  await page.setViewportSize({ width: 390, height: 667 });
+  await page.goto("/");
+  for (const id of ["verse-of-the-day", "predicaciones-section"]) {
+    const section = page.locator(`#${id}`);
+    await section.scrollIntoViewIfNeeded();
+    const geometry = await section.evaluate((element) => {
+      const arrow = element.querySelector("a[aria-label^='Desplazarse']")?.getBoundingClientRect();
+      return { arrowTop: arrow?.top, arrowBottom: arrow?.bottom, viewport: innerHeight };
+    });
+    expect(geometry.arrowTop, `${id} should show its arrow inside the viewport`).toBeGreaterThanOrEqual(0);
+    expect(geometry.arrowBottom, `${id} should show its arrow inside the viewport`).toBeLessThanOrEqual(geometry.viewport);
+  }
+});
