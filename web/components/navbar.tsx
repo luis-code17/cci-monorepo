@@ -48,7 +48,11 @@ export function Navbar() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-50 translate-y-0 opacity-100 transition-all duration-300"
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        hasScrolled
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-full opacity-0 pointer-events-none"
+      }`}
     >
       <div className="section-shell">
         <div className={`navbar relative mt-3 min-h-14 rounded-full border px-3 py-2 shadow-lg backdrop-blur-xl transition-colors ${hasScrolled ? "border-base-content/15 bg-base-100/90" : "border-base-content/10 bg-base-100/75"}`}>

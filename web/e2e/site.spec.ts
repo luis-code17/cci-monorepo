@@ -43,7 +43,14 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   test.skip(testInfo.project.name !== "mobile-chromium", "Mobile drawer is specific to the mobile layout");
   await page.goto("/");
 
-  await page.getByLabel("Abrir menú").click();
+  const header = page.getByRole("banner");
+  await expect(header).toHaveClass(/opacity-0/);
+  await expect(header).toHaveClass(/pointer-events-none/);
+  await page.evaluate(() => window.scrollTo(0, 50));
+  await expect(header).toHaveClass(/opacity-100/);
+  const menuButton = page.getByLabel("Abrir menú");
+  await expect(menuButton).toBeVisible();
+  await menuButton.click();
   const mobileNav = page.getByRole("navigation", { name: "Menú móvil" });
   await expect(mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" })).toBeVisible();
   await mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" }).click();
@@ -57,6 +64,11 @@ test("desktop navigation replaces the mobile menu from 900 pixels", async ({ pag
   await page.setViewportSize({ width: 900, height: 900 });
   await page.goto("/");
 
+  const header = page.getByRole("banner");
+  await expect(header).toHaveClass(/opacity-0/);
+  await expect(header).toHaveClass(/pointer-events-none/);
+  await page.evaluate(() => window.scrollTo(0, 50));
+  await expect(header).toHaveClass(/opacity-100/);
   await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
   await expect(page.getByLabel("Abrir menú")).toBeHidden();
   const widths = await page.evaluate(() => ({
