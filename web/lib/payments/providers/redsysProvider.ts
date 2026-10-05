@@ -78,7 +78,7 @@ export class RedsysProvider implements PaymentProvider {
       if (!valid) return { valid: false };
 
       return { valid: true, result: parsed };
-    } catch (err) {
+    } catch {
       return { valid: false };
     }
   }

@@ -1,0 +1,53 @@
+import { expect, test } from "@playwright/test";
+
+test("home renders and its shared background stays fixed without tiling", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("heading", { name: "Bienvenidos a CCI Sabadell" })).toBeVisible();
+  const background = page.locator(".route-background-layer");
+  await expect(background).toHaveCount(1);
+
+  const styles = await background.evaluate((element) => {
+    const computed = getComputedStyle(element);
+    return { position: computed.position, repeat: computed.backgroundRepeat };
+  });
+  expect(styles).toEqual({ position: "fixed", repeat: "no-repeat" });
+
+  const dimensions = await page.evaluate(() => ({
+    documentWidth: document.documentElement.scrollWidth,
+    viewportWidth: document.documentElement.clientWidth,
+  }));
+  expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
+});
+
+test("main routes render without horizontal overflow", async ({ page }) => {
+  const routes = [
+    { path: "/about", heading: "CCI Sabadell" },
+    { path: "/blog", heading: "Blog y reflexiones" },
+    { path: "/predicaciones", heading: "Mensajes y Predicaciones" },
+    { path: "/ofrendas", heading: "Donaciones y Ofrendas" },
+  ];
+
+  for (const route of routes) {
+    await page.goto(route.path);
+    await expect(page.getByRole("heading", { name: route.heading }).first()).toBeVisible();
+    const widths = await page.evaluate(() => ({
+      document: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(widths.document, `${route.path} should fit the viewport`).toBeLessThanOrEqual(widths.viewport);
+  }
+});
+
+test("mobile navigation opens and reaches the donation page", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile-chromium", "Mobile drawer is specific to the mobile layout");
+  await page.goto("/");
+
+  await page.getByLabel("Abrir menú").click();
+  const mobileNav = page.getByRole("navigation", { name: "Menú móvil" });
+  await expect(mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" })).toBeVisible();
+  await mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" }).click();
+
+  await expect(page).toHaveURL(/\/ofrendas$/);
+  await expect(page.getByRole("heading", { name: "Donaciones y Ofrendas" })).toBeVisible();
+});

@@ -325,10 +325,12 @@ export function extractYouTubeChannelIdFromUrl(input: string) {
 
 export const getLatestVideos = cache(async function getLatestVideos(maxResults = 6) {
   const limit = Math.min(Math.max(maxResults, 1), 15);
-  const feed = await fetchYouTubeFeed();
-  const videos = feed ? normalizeEntries(feed).slice(0, limit) : [];
-
-  return videos;
+  try {
+    const feed = await fetchYouTubeFeed();
+    return feed ? normalizeEntries(feed).slice(0, limit) : [];
+  } catch {
+    return [];
+  }
 });
 
 export function getFallbackVideoItem() {

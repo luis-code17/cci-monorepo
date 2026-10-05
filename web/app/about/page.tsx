@@ -63,6 +63,7 @@ export default function AboutPage() {
                 alt="Pastor de CCI Sabadell"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
+                priority
                 className="object-cover"
               />
             </div>

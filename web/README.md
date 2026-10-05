@@ -18,6 +18,19 @@ The `/predicaciones` page uses the YouTube Data API v3 to load the channel's pub
 pnpm dev
 ```
 
+## E2E tests
+
+The Playwright harness starts its own local Next.js server and runs the browser suite in desktop and mobile Chromium contexts. Payment requests are intercepted, so tests never send real donations.
+
+```bash
+pnpm e2e:install   # once per machine
+pnpm e2e           # run the suite
+pnpm e2e:headed    # watch the browser
+pnpm e2e:ui        # open Playwright's test UI
+```
+
+The HTML report is written to `playwright-report/`; traces, screenshots, and videos for failed tests are written to `test-results/`.
+
 ## Migration Notes
 
 See [docs/wordpress-migration.md](./docs/wordpress-migration.md) for the required WordPress plugins, content model, and GraphQL examples.
