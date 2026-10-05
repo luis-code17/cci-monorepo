@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { getLatestVideos } from "@/lib/youtube";
+import { getYouTubeCatalog } from "@/lib/youtube";
 import { PredicacionesLibrary } from "@/components/predicaciones-library";
 
 export const metadata = {
@@ -13,8 +13,8 @@ export const revalidate = 3600;
 const youtubeChannelUrl = "https://www.youtube.com/@CentroCristianoInternacionalSa";
 
 export default async function PredicacionesPage() {
-  const latestVideos = await getLatestVideos(15);
-  const hasVideos = latestVideos.length > 0;
+  const catalog = await getYouTubeCatalog();
+  const hasVideos = catalog.videos.length > 0;
 
   return (
     <div className="section-shell py-10 sm:py-12 lg:py-16">
@@ -45,7 +45,7 @@ export default async function PredicacionesPage() {
           </div>
         )}
 
-        {hasVideos && <PredicacionesLibrary videos={latestVideos} />}
+        {hasVideos && <PredicacionesLibrary videos={catalog.videos} playlists={catalog.playlists} apiEnabled={catalog.apiEnabled} />}
       </section>
     </div>
   );

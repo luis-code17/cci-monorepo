@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, ChevronDown, Search, X } from "lucide-react";
 import { YouTubeVideoCard } from "@/components/youtube-video-card";
-import type { YouTubeVideo } from "@/lib/youtube";
+import type { YouTubePlaylist, YouTubeVideo } from "@/lib/youtube";
 
 type PredicacionesLibraryProps = {
   videos: YouTubeVideo[];
+  playlists: YouTubePlaylist[];
+  apiEnabled: boolean;
 };
 
 function formatDateEs(value: string) {
@@ -27,9 +29,10 @@ function getEmbedUrl(videoId: string) {
   return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 }
 
-export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
+export function PredicacionesLibrary({ videos, playlists, apiEnabled }: PredicacionesLibraryProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Todas");
+  const [playlist, setPlaylist] = useState("Todas");
   const [sort, setSort] = useState("recent");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [activeVideo, setActiveVideo] = useState<YouTubeVideo | null>(null);
@@ -59,8 +62,10 @@ export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
     const normalizedQuery = query.trim().toLocaleLowerCase("es");
     const result = videos.filter((video) => {
       const matchesCategory = category === "Todas" || video.tags.includes(category);
-      const searchableText = `${video.title} ${video.tags.join(" ")}`.toLocaleLowerCase("es");
-      return matchesCategory && (!normalizedQuery || searchableText.includes(normalizedQuery));
+      const matchesPlaylist = playlist === "Todas" || video.playlistIds?.includes(playlist);
+      const playlistNames = (video.playlistIds ?? []).map((id) => playlists.find((item) => item.id === id)?.title ?? "").join(" ");
+      const searchableText = `${video.title} ${video.tags.join(" ")} ${playlistNames}`.toLocaleLowerCase("es");
+      return matchesCategory && matchesPlaylist && (!normalizedQuery || searchableText.includes(normalizedQuery));
     });
 
     return result.sort((a, b) => {
@@ -68,7 +73,7 @@ export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
       if (sort === "title") return a.title.localeCompare(b.title, "es");
       return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
     });
-  }, [category, query, sort, videos]);
+  }, [category, playlist, playlists, query, sort, videos]);
 
   return (
     <>
@@ -82,7 +87,7 @@ export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Buscar por título o categoría"
+                placeholder="Buscar por título, tema o lista"
                 className="grow"
               />
             </label>
@@ -126,6 +131,16 @@ export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
             </div>
           </div>
 
+          {apiEnabled && playlists.length > 0 ? (
+            <div className="mt-5">
+              <label htmlFor="playlist-filter" className="mb-2 block text-sm font-medium text-base-content/70">Filtrar por lista</label>
+              <select id="playlist-filter" value={playlist} onChange={(event) => setPlaylist(event.target.value)} className="select select-bordered w-full rounded-xl border-base-content/20 bg-base-content/10 lg:max-w-md">
+                <option value="Todas">Todas las listas ({videos.length})</option>
+                {playlists.map((item) => <option key={item.id} value={item.id}>{item.title} ({item.videoCount})</option>)}
+              </select>
+            </div>
+          ) : null}
+
           {categories.length > 0 ? (
             <div className="mt-5 flex flex-wrap gap-2" aria-label="Categorías de mensajes">
               <button
@@ -156,7 +171,7 @@ export function PredicacionesLibrary({ videos }: PredicacionesLibraryProps) {
         ) : (
           <div className="border-t border-base-content/15 px-6 py-16 text-center">
             <p className="text-lg font-semibold">No encontramos mensajes con esos criterios.</p>
-            <button type="button" onClick={() => { setQuery(""); setCategory("Todas"); }} className="btn btn-ghost mt-3 rounded-full">Limpiar filtros</button>
+            <button type="button" onClick={() => { setQuery(""); setCategory("Todas"); setPlaylist("Todas"); }} className="btn btn-ghost mt-3 rounded-full">Limpiar filtros</button>
           </div>
         )}
       </section>

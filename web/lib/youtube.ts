@@ -7,6 +7,7 @@ const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/channel/UCjKLSuPn3y7dfQHIQ5
 const YOUTUBE_CHANNEL_ID = extractYouTubeChannelIdFromUrl(YOUTUBE_CHANNEL_URL) ?? "UCjKLSuPn3y7dfQHIQ5uDrkA";
 const YOUTUBE_RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${YOUTUBE_CHANNEL_ID}`;
 const DEFAULT_REVALIDATE_SECONDS = 60 * 60;
+const YOUTUBE_API_BASE = "https://www.googleapis.com/youtube/v3";
 
 export type YouTubeVideo = {
   id: string;
@@ -17,7 +18,102 @@ export type YouTubeVideo = {
   tags: string[];
   durationSeconds?: number | null;
   durationLabel?: string | null;
+  playlistIds?: string[];
 };
+
+export type YouTubePlaylist = {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  videoCount: number;
+};
+
+export type YouTubeCatalog = {
+  videos: YouTubeVideo[];
+  playlists: YouTubePlaylist[];
+  apiEnabled: boolean;
+};
+
+type ApiPlaylist = { id: string; snippet?: { title?: string; description?: string; thumbnails?: Record<string, { url?: string }> }; contentDetails?: { itemCount?: number } };
+type ApiPlaylistItem = { snippet?: { title?: string; publishedAt?: string; thumbnails?: Record<string, { url?: string }>; resourceId?: { videoId?: string } } };
+type ApiPage<T> = { items?: T[]; nextPageToken?: string };
+
+async function fetchYouTubeApi<T>(path: string, params: Record<string, string>) {
+  const key = process.env.YOUTUBE_API_KEY;
+  if (!key) return null;
+  const url = new URL(`${YOUTUBE_API_BASE}/${path}`);
+  Object.entries({ ...params, key }).forEach(([name, value]) => url.searchParams.set(name, value));
+  const response = await fetch(url, { next: { revalidate: DEFAULT_REVALIDATE_SECONDS } });
+  if (!response.ok) return null;
+  return await response.json() as T;
+}
+
+function bestThumbnail(thumbnails?: Record<string, { url?: string }>) {
+  return thumbnails?.maxres?.url ?? thumbnails?.standard?.url ?? thumbnails?.high?.url ?? thumbnails?.medium?.url ?? thumbnails?.default?.url ?? "";
+}
+
+async function getAllPages<T>(path: string, params: Record<string, string>, maxPages = 1000) {
+  const items: T[] = [];
+  let pageToken: string | undefined;
+  for (let page = 0; page < maxPages; page += 1) {
+    const result = await fetchYouTubeApi<ApiPage<T>>(path, { ...params, ...(pageToken ? { pageToken } : {}) });
+    if (!result) return null;
+    items.push(...(result.items ?? []));
+    if (!result.nextPageToken) break;
+    pageToken = result.nextPageToken;
+  }
+  return items;
+}
+
+export const getYouTubeCatalog = cache(async function getYouTubeCatalog(): Promise<YouTubeCatalog> {
+  if (!process.env.YOUTUBE_API_KEY) {
+    return { videos: await getLatestVideos(15), playlists: [], apiEnabled: false };
+  }
+
+  const channel = await fetchYouTubeApi<{ items?: { contentDetails?: { relatedPlaylists?: { uploads?: string } } }[] }>("channels", {
+    part: "contentDetails", id: YOUTUBE_CHANNEL_ID,
+  });
+  const uploadsId = channel?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+  const [playlistRows, uploadItems] = await Promise.all([
+    getAllPages<ApiPlaylist>("playlists", { part: "snippet,contentDetails", channelId: YOUTUBE_CHANNEL_ID, maxResults: "50" }),
+    uploadsId ? getAllPages<ApiPlaylistItem>("playlistItems", { part: "snippet,contentDetails", playlistId: uploadsId, maxResults: "50" }) : Promise.resolve(null),
+  ]);
+  if (!playlistRows || !uploadItems) return { videos: await getLatestVideos(15), playlists: [], apiEnabled: false };
+
+  const playlists: YouTubePlaylist[] = playlistRows.map((playlist) => ({
+    id: playlist.id,
+    title: playlist.snippet?.title ?? "Lista de reproducción",
+    description: playlist.snippet?.description ?? "",
+    thumbnail: bestThumbnail(playlist.snippet?.thumbnails),
+    videoCount: playlist.contentDetails?.itemCount ?? 0,
+  }));
+  const membership = new Map<string, Set<string>>();
+  await Promise.all(playlists.map(async (playlist) => {
+    const items = await getAllPages<ApiPlaylistItem>("playlistItems", { part: "snippet,contentDetails", playlistId: playlist.id, maxResults: "50" });
+    for (const item of items ?? []) {
+      const id = item.snippet?.resourceId?.videoId;
+      if (id) {
+        const lists = membership.get(id) ?? new Set<string>();
+        lists.add(playlist.id);
+        membership.set(id, lists);
+      }
+    }
+  }));
+
+  const videos: YouTubeVideo[] = uploadItems.flatMap((item) => {
+    const snippet = item.snippet;
+    const id = snippet?.resourceId?.videoId;
+    if (!id || snippet?.title === "Deleted video" || snippet?.title === "Private video") return [];
+    const thumb = bestThumbnail(snippet.thumbnails);
+    return [{
+      id, title: cleanTitle(snippet.title ?? "Predicación"),
+      url: `https://www.youtube.com/watch?v=${id}`, thumbnail: thumb || `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+      publishedAt: snippet.publishedAt ?? "", tags: [], playlistIds: Array.from(membership.get(id) ?? []),
+    }];
+  });
+  return { videos, playlists, apiEnabled: true };
+});
 
 type YoutubeFeedXml = {
   feed?: {
