@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type BrandMarkProps = {
   size: "sm" | "md" | "lg";
@@ -35,27 +35,23 @@ function isDarkThemeValue(val: string | null) {
   return v === "dark" || v.includes("dark");
 }
 
+function subscribeToTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  return () => observer.disconnect();
+}
+
+function getThemeSnapshot() {
+  return isDarkThemeValue(document.documentElement.getAttribute("data-theme"));
+}
+
+function getServerThemeSnapshot() {
+  return false;
+}
+
 export function BrandMark({ size, className = "" }: BrandMarkProps) {
   const asset = sizes[size];
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const initial = typeof document !== "undefined" ? document.documentElement.getAttribute("data-theme") : null;
-    setIsDark(isDarkThemeValue(initial));
-
-    const obs = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        if (m.type === "attributes" && m.attributeName === "data-theme") {
-          const v = document.documentElement.getAttribute("data-theme");
-          setIsDark(isDarkThemeValue(v));
-        }
-      }
-    });
-
-    obs.observe(document.documentElement, { attributes: true });
-
-    return () => obs.disconnect();
-  }, []);
+  const isDark = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerThemeSnapshot);
 
   const src = isDark ? asset.srcDark : asset.srcLight;
 
@@ -66,8 +62,7 @@ export function BrandMark({ size, className = "" }: BrandMarkProps) {
         alt="CCI Sabadell"
         width={asset.width}
         height={asset.height}
-        className="h-auto w-auto object-contain"
-        style={{ width: "auto", height: "auto" }}
+        className="h-full w-full object-contain"
         priority={size === "sm"}
       />
     </span>

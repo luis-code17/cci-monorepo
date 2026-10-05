@@ -17,7 +17,7 @@ export function ScriptureCard({ title, verse, reference }: ScriptureCardProps) {
 
         <div className="mx-auto max-w-2xl space-y-4">
           <blockquote className="text-base leading-7 text-base-content/80 italic sm:text-lg sm:leading-8">
-            "{verse}"
+            “{verse}”
           </blockquote>
           
           {reference && (

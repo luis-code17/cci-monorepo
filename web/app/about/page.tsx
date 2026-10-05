@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { Camera, Globe, MessageCircle, PlayCircle } from "lucide-react";
-import { ContactForm } from "@/components/contact/ContactForm";
+import { Camera, Globe, PlayCircle } from "lucide-react";
 
 export const metadata = {
   title: "Sobre Nosotros - CCI Sabadell",
@@ -12,11 +11,6 @@ const socialLinks = [
     label: "Instagram",
     href: "https://www.instagram.com/cci_sabadell/",
     icon: Camera,
-  },
-  {
-    label: "WhatsApp",
-    href: "https://wa.me/34999999999",
-    icon: MessageCircle,
   },
   {
     label: "Facebook",

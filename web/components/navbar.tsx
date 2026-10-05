@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BrandMark } from "@/components/brand-mark";
 
 const links = [
   { href: "/", label: "Inicio" },
@@ -47,15 +48,15 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        hasScrolled
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
-      }`}
+      className="fixed inset-x-0 top-0 z-50 translate-y-0 opacity-100 transition-all duration-300"
     >
       <div className="section-shell">
-        <div className="navbar relative mt-3 min-h-14 px-0 py-2.5">
-          <div className="navbar-start lg:w-auto lg:flex-1" />
+        <div className={`navbar relative mt-3 min-h-14 rounded-full border px-3 py-2 shadow-lg backdrop-blur-xl transition-colors ${hasScrolled ? "border-base-content/15 bg-base-100/90" : "border-base-content/10 bg-base-100/75"}`}>
+          <div className="navbar-start flex-1 lg:flex-none">
+            <Link href="/" aria-label="CCI Sabadell, inicio" className="inline-flex items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+              <BrandMark size="sm" className="h-9 w-14" />
+            </Link>
+          </div>
 
           <div className="navbar-center absolute right-0 flex translate-x-0 items-center gap-2 lg:left-1/2 lg:right-auto lg:-translate-x-1/2">
             <nav

@@ -1,111 +1,74 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useState } from "react";
-import { ArrowRight, Check, Loader2 } from "lucide-react";
 
 type AmountSelectorProps = {
   onAmountChange?: (amount: number | null) => void;
-  ctaDisabled?: boolean;
-  ctaLoading?: boolean;
 };
 
-const suggestedAmounts = [
-  { value: 10, label: "10€" },
-  { value: 25, label: "25€" },
-  { value: 50, label: "50€" },
-  { value: 100, label: "100€" },
-];
+const suggestedAmounts = [10, 25, 50, 100];
 
-export function AmountSelector({ onAmountChange, ctaDisabled = false, ctaLoading = false }: AmountSelectorProps) {
+export function AmountSelector({ onAmountChange }: AmountSelectorProps) {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
-  const [customAmount, setCustomAmount] = useState<string>("");
+  const [customAmount, setCustomAmount] = useState("");
 
-  const handleSelectAmount = (amount: number) => {
+  function selectAmount(amount: number) {
     setSelectedAmount(amount);
-    setCustomAmount(amount.toFixed(2));
+    setCustomAmount("");
     onAmountChange?.(amount);
-  };
+  }
 
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  function changeCustomAmount(value: string) {
     setCustomAmount(value);
-
-    if (value && !Number.isNaN(Number.parseFloat(value))) {
-      setSelectedAmount(null);
-      onAmountChange?.(Number.parseFloat(value));
-    } else {
-      onAmountChange?.(null);
-    }
-  };
-
-  const formattedSelection = selectedAmount ?? (customAmount ? Number.parseFloat(customAmount) : null);
+    setSelectedAmount(null);
+    const normalized = value.trim().replace(",", ".");
+    const amount = normalized ? Number(normalized) : NaN;
+    onAmountChange?.(Number.isFinite(amount) && amount > 0 ? amount : null);
+  }
 
   return (
-    <section className="space-y-6">
-      <div className="text-center">
-        <p className="text-[11px] uppercase tracking-[0.28em] text-base-content/45">Selecciona un importe</p>
+    <section aria-labelledby="amount-title" className="space-y-5">
+      <div>
+        <h3 id="amount-title" className="text-sm font-semibold text-base-content">Elige tu aportación</h3>
+        <p className="mt-1 text-sm text-base-content/65">Selecciona una cantidad o introduce otra.</p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {suggestedAmounts.map((amount) => {
-          const isSelected = selectedAmount === amount.value;
-
+          const active = selectedAmount === amount;
           return (
             <button
-              key={amount.value}
+              key={amount}
               type="button"
-              onClick={() => handleSelectAmount(amount.value)}
-            className={`relative rounded-xl border px-4 py-3 text-left transition-colors duration-200 ${
-              isSelected
-                  ? "border-primary bg-primary text-primary-content"
-                  : "border-base-300 bg-base-100"
-              }`}
+              aria-pressed={active}
+              onClick={() => selectAmount(amount)}
+              className={`flex min-h-14 items-center justify-between rounded-xl border px-4 text-left text-lg font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${active ? "border-primary bg-primary text-primary-content shadow-md shadow-primary/15" : "border-base-content/15 bg-base-100/70 text-base-content hover:border-primary/50 hover:bg-primary/5"}`}
             >
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className={`text-lg font-semibold font-serif ${isSelected ? "text-primary-content" : "text-base-content"}`}>
-                    {amount.label}
-                  </div>
-                </div>
-
-                <div
-                  className={`flex h-6 w-6 items-center justify-center rounded-full border ${
-                    isSelected ? "border-primary-content/25 bg-primary-content/10" : "border-base-300 bg-base-100"
-                  }`}
-                >
-                  {isSelected ? <Check className="h-3.5 w-3.5" /> : null}
-                </div>
-              </div>
+              <span>{amount} €</span>
+              {active ? <Check className="h-4 w-4" aria-hidden="true" /> : null}
             </button>
           );
         })}
       </div>
 
-      <div className="mx-auto max-w-md pt-1">
-        <label htmlFor="customAmount" className="mb-2 block text-xs uppercase tracking-[0.22em] text-base-content/45">
-          O ingresa otro importe
-        </label>
-        <div className="flex items-center gap-2 rounded-xl border border-base-300 bg-base-100 px-3 py-2.5 focus-within:border-primary/35">
-          <span className="text-sm text-base-content/45">€</span>
+      <div>
+        <label htmlFor="customAmount" className="mb-2 block text-sm font-medium text-base-content/75">Otra cantidad</label>
+        <div className="flex h-12 items-center rounded-xl border border-base-content/15 bg-base-100/70 px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
           <input
-            type="number"
+            type="text"
+            inputMode="decimal"
             id="customAmount"
-            placeholder="Cantidad"
+            autoComplete="off"
+            placeholder="Por ejemplo, 30"
             value={customAmount}
-            onChange={handleCustomAmountChange}
-            className="w-full bg-transparent text-base outline-none placeholder:text-base-content/25"
-            min="1"
-            step="0.01"
+            onChange={(event) => changeCustomAmount(event.target.value)}
+            aria-describedby="amount-hint"
+            className="w-full bg-transparent text-base text-base-content outline-none placeholder:text-base-content/40"
           />
-          <button
-            type="submit"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-content transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={ctaDisabled || !formattedSelection}
-          >
-            {ctaLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-            <span>{ctaLoading ? '...' : 'Donar'}</span>
-          </button>
+          <span className="pl-3 font-semibold text-base-content/55">€</span>
         </div>
+        <p id="amount-hint" className="mt-2 text-xs text-base-content/55">El importe mínimo es 1 €.</p>
       </div>
     </section>
   );

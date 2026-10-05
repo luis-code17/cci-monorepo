@@ -3,8 +3,6 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/Section";
 import { HeroSection } from "@/components/HeroSection";
 import { VerseCard } from "@/components/verse-card";
-import { BlogCard } from "@/components/blog-card";
-import { getPosts } from "@/lib/blog";
 import { getVerseOfTheDay } from "@/lib/verse";
 import { getLatestVideos } from "@/lib/youtube";
 import { PredicacionesVideos } from "@/components/predicaciones-videos";
@@ -36,8 +34,6 @@ const videoPreviews = [
 ];
 
 export default async function HomePage() {
-  const posts = await getPosts();
-  const latestPosts = posts.slice(0, 4);
   const verse = (await getVerseOfTheDay()) ?? {
     verse: "Lámpara es a mis pies tu palabra, y lumbrera a mi camino.",
     reference: "Salmo 119:105",

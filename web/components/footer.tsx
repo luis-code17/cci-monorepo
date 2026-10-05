@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Camera, Mail, MapPin, MessageCircle, PlayCircle } from "lucide-react";
+import { Camera, Mail, MapPin, PlayCircle } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 
 const serviceTimes = [
@@ -17,7 +17,7 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t-2 border-base-content/60 bg-base-100">
+    <footer className="border-t border-base-content/15 bg-base-100/80 backdrop-blur-xl">
       <div className="section-shell py-12 sm:py-14 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.9fr]">
           <section className="space-y-5">
@@ -51,15 +51,6 @@ export function Footer() {
                 className="btn btn-sm btn-ghost rounded-full"
               >
                 Instagram
-              </a>
-              <a
-                href="https://wa.me/34999999999"
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-sm btn-ghost rounded-full"
-              >
-                <MessageCircle className="h-4 w-4" />
-                WhatsApp
               </a>
               <a
                 href="https://www.youtube.com/@CentroCristianoInternacionalSa"

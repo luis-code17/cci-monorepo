@@ -7,9 +7,7 @@ export async function POST(req: Request) {
     const text = await req.text();
     const params = Object.fromEntries(new URLSearchParams(text).entries());
 
-    const parsed = RedsysNotificationSchema.parse(params);
-
-    const { Ds_MerchantParameters } = parsed as Record<string, string>;
+    RedsysNotificationSchema.parse(params);
 
     const result = await validatePaymentNotification('redsys', params, {});
     if (!result || !result.valid) {
@@ -20,7 +18,7 @@ export async function POST(req: Request) {
 
     // Respond 200 to acknowledge to Redsys
     return NextResponse.json({ ok: true });
-  } catch (err: any) {
-    return NextResponse.json({ ok: false, message: err.message }, { status: 400 });
+  } catch (err: unknown) {
+    return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : 'Invalid notification' }, { status: 400 });
   }
 }

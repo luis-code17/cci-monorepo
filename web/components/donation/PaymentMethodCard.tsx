@@ -1,86 +1,39 @@
-"use client";
-
-import { Landmark, Smartphone } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { Check, Clock3, CreditCard, Landmark, Smartphone } from "lucide-react";
 
 type PaymentMethodCardProps = {
   title: string;
   description: string;
-  icon: "smartphone" | "landmark";
-  status?: "available" | "soon" | "coming";
-  bankDetails?: {
-    titular: string;
-    iban: string;
-    concepto: string;
-  };
+  icon: "smartphone" | "landmark" | "card";
+  status?: "available" | "soon";
 };
 
-export function PaymentMethodCard({ title, description, icon, status = "soon", bankDetails }: PaymentMethodCardProps) {
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const isSoon = status !== "available";
-  const Icon = icon === "smartphone" ? Smartphone : Landmark;
-  
+export function PaymentMethodCard({ title, description, icon, status = "soon" }: PaymentMethodCardProps) {
+  const available = status === "available";
+  const Icon = icon === "smartphone" ? Smartphone : icon === "landmark" ? Landmark : CreditCard;
+
   return (
-    <article className={`surface-card overflow-hidden transition-all duration-300 hover:shadow-md ${isSoon ? "opacity-75" : ""}`}>
-      <div className="space-y-4 p-6 sm:p-7">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2 flex-1">
-            <h3 className="text-2xl font-semibold text-base-content font-serif">{title}</h3>
-            <p className="text-sm leading-6 text-base-content/70">{description}</p>
+    <article className={`flex h-full flex-col rounded-2xl border p-5 shadow-sm backdrop-blur-xl transition duration-200 sm:p-6 ${available ? "border-primary/30 bg-primary/5 shadow-primary/5" : "border-base-content/15 bg-base-content/5"}`}>
+      <div className="flex items-start gap-4">
+        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${available ? "bg-primary text-primary-content" : "bg-base-content/10 text-base-content/65"}`}>
+          <Icon className="h-5 w-5" aria-hidden="true" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-serif text-xl font-semibold text-base-content sm:text-2xl">{title}</h3>
+            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${available ? "bg-success/15 text-success" : "bg-base-content/10 text-base-content/60"}`}>
+              {available ? <Check className="h-3 w-3" aria-hidden="true" /> : <Clock3 className="h-3 w-3" aria-hidden="true" />}
+              {available ? "Disponible" : "Próximamente"}
+            </span>
           </div>
-          <div className={`p-3 rounded-xl flex-shrink-0 ${isSoon ? "bg-base-200" : "bg-primary/10"}`}>
-            <Icon className={`h-6 w-6 ${isSoon ? "text-base-content/40" : "text-primary"}`} />
-          </div>
+          <p className="mt-2 text-sm leading-6 text-base-content/70">{description}</p>
         </div>
-
-        {isSoon && !bankDetails && (
-          <div className="flex items-center gap-2 pt-2">
-            <div className="h-2 w-2 rounded-full bg-base-content/40" />
-            <span className="text-xs uppercase tracking-[0.2em] font-medium text-base-content/50">Próximamente disponible</span>
-          </div>
-        )}
-
-        {bankDetails && (
-          <>
-            <button
-              type="button"
-              aria-expanded={isDetailsOpen}
-              onClick={() => setIsDetailsOpen((open) => !open)}
-              className="w-full rounded-lg bg-primary/10 px-4 py-2 font-medium text-primary transition-colors duration-200 hover:bg-primary/20"
-            >
-              {isDetailsOpen ? "Ocultar datos bancarios" : "Ver datos bancarios"}
-            </button>
-
-            {isDetailsOpen && (
-              <div className="space-y-3 rounded-lg border border-base-200 bg-base-200/40 p-4 text-sm">
-                <p><span className="font-semibold">Titular:</span> {bankDetails.titular}</p>
-                <p className="break-all"><span className="font-semibold">IBAN:</span> {bankDetails.iban}</p>
-                <p><span className="font-semibold">Concepto:</span> {bankDetails.concepto}</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {!isSoon && (
-          <button
-            type="button"
-            className="w-full rounded-lg bg-primary/10 px-4 py-2 font-medium text-primary hover:bg-primary/20 transition-colors duration-200"
-          >
-            Seleccionar método
-          </button>
-        )}
       </div>
-
-      {/* Decorative placeholder QR for Bizum */}
-      {title === "Bizum" && (
-        <div className="border-t border-base-200/50 bg-base-50/30 px-6 py-5 flex justify-center">
-          <div className="w-24 h-24 bg-base-200 rounded-lg flex items-center justify-center border-2 border-dashed border-base-300">
-            <svg className="w-12 h-12 text-base-content/20" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M3 11h8V3H3v8zm0 8h8v-8H3v8zm8-16h8V3h-8v8zm8 8h8v-8h-8v8zm0 8h8v-8h-8v8zM3 21h8v-8H3v8z" />
-            </svg>
-          </div>
-        </div>
-      )}
+      {available ? (
+        <Link href="#donacion" className="btn btn-outline mt-5 min-h-11 w-full rounded-xl border-primary/30 text-primary hover:border-primary hover:bg-primary hover:text-primary-content">
+          Ir al formulario de donación
+        </Link>
+      ) : null}
     </article>
   );
 }
