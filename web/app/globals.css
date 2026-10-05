@@ -215,6 +215,35 @@ body {
   background-size: cover;
 }
 
+.site-desktop-nav {
+  display: none;
+}
+
+.site-mobile-nav {
+  display: inline-flex;
+}
+
+.site-nav-controls {
+  right: 0;
+  transform: translateX(0);
+}
+
+@media (min-width: 900px) {
+  .site-desktop-nav {
+    display: block;
+  }
+
+  .site-mobile-nav {
+    display: none;
+  }
+
+  .site-nav-controls {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+}
+
 [data-theme="dark"] .route-background-layer {
   background-image: url("/fondo_pc_dark.png");
 }

@@ -58,10 +58,10 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="navbar-center absolute right-0 flex translate-x-0 items-center gap-2 lg:left-1/2 lg:right-auto lg:-translate-x-1/2">
+          <div className="site-nav-controls navbar-center absolute right-0 flex translate-x-0 items-center gap-2">
             <nav
               aria-label="Principal"
-              className="hidden lg:block lg:rounded-full lg:border lg:border-base-content/10 lg:bg-base-100/70 lg:px-3 lg:py-1.5 lg:shadow-sm lg:backdrop-blur-sm"
+              className="site-desktop-nav rounded-full border border-base-content/10 bg-base-100/70 px-3 py-1.5 shadow-sm backdrop-blur-sm"
             >
               <ul className="menu menu-horizontal items-center gap-2 px-1 text-sm lg:gap-2">
                 {links.map((link) => {
@@ -89,7 +89,7 @@ export function Navbar() {
             </nav>
             <label
               htmlFor="site-drawer"
-              className="btn btn-ghost btn-circle border border-base-content/10 bg-base-100/60 text-base-content shadow-sm backdrop-blur-sm lg:hidden"
+              className="site-mobile-nav btn btn-ghost btn-circle border border-base-content/10 bg-base-100/60 text-base-content shadow-sm backdrop-blur-sm"
               aria-label="Abrir menú"
             >
               <Menu className="h-5 w-5" aria-hidden="true" />

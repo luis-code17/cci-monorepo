@@ -51,3 +51,17 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   await expect(page).toHaveURL(/\/ofrendas$/);
   await expect(page.getByRole("heading", { name: "Donaciones y Ofrendas" })).toBeVisible();
 });
+
+test("desktop navigation replaces the mobile menu from 900 pixels", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Breakpoint check runs in the desktop project");
+  await page.setViewportSize({ width: 900, height: 900 });
+  await page.goto("/");
+
+  await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
+  await expect(page.getByLabel("Abrir menú")).toBeHidden();
+  const widths = await page.evaluate(() => ({
+    document: document.documentElement.scrollWidth,
+    viewport: document.documentElement.clientWidth,
+  }));
+  expect(widths.document).toBeLessThanOrEqual(widths.viewport);
+});

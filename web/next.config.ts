@@ -36,6 +36,7 @@ const WORDPRESS_ALLOW_LOCAL_IP = (() => {
 })();
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     dangerouslyAllowLocalIP: WORDPRESS_ALLOW_LOCAL_IP,
     remotePatterns: [
