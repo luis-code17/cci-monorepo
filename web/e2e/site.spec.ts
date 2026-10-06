@@ -75,7 +75,7 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
       YT?: {
         PlayerState: { ENDED: number };
         Player: new (element: HTMLIFrameElement, options: { events: {
-          onReady: (event: { target: { destroy: () => void; unMute: () => void; setVolume: (volume: number) => void } }) => void;
+          onReady: (event: { target: { destroy: () => void; playVideo: () => void; unMute: () => void; setVolume: (volume: number) => void } }) => void;
           onStateChange: (event: { data: number }) => void;
           onVolumeChange: (event: { data: { muted: boolean; volume: number } }) => void;
         } }) => { destroy: () => void };
@@ -84,13 +84,14 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
       mockYouTubeEnded?: () => void;
       mockYouTubeVolumeChange?: () => void;
       mockYouTubeUnmuteCalls?: number;
+      mockYouTubePlayCalls?: number;
     };
     const mockWindow = window as MockWindow;
     mockWindow.YT = {
       PlayerState: { ENDED: 0 },
       Player: class {
         constructor(element: HTMLIFrameElement, options: { events: {
-          onReady: (event: { target: { destroy: () => void; unMute: () => void; setVolume: (volume: number) => void } }) => void;
+          onReady: (event: { target: { destroy: () => void; playVideo: () => void; unMute: () => void; setVolume: (volume: number) => void } }) => void;
           onStateChange: (event: { data: number }) => void;
           onVolumeChange: (event: { data: { muted: boolean; volume: number } }) => void;
         } }) {
@@ -99,11 +100,13 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
           mockWindow.mockYouTubeVolumeChange = () => options.events.onVolumeChange({ data: { muted: false, volume: 100 } });
           options.events.onReady({ target: {
             destroy: () => {},
+            playVideo: () => { mockWindow.mockYouTubePlayCalls = (mockWindow.mockYouTubePlayCalls ?? 0) + 1; },
             unMute: () => { mockWindow.mockYouTubeUnmuteCalls = (mockWindow.mockYouTubeUnmuteCalls ?? 0) + 1; },
             setVolume: () => {},
           } });
         }
         destroy() {}
+        playVideo() {}
         unMute() {}
         setVolume() {}
       },
@@ -121,6 +124,7 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   await expect(videoFrame).toHaveAttribute("allowfullscreen", "");
   await expect(videoFrame).toHaveAttribute("allow", /fullscreen/);
   await expect(videoFrame).toHaveAttribute("src", /enablejsapi=1/);
+  await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubePlayCalls?: number }).mockYouTubePlayCalls)).toBe(1);
   await expect(viewer.getByRole("button", { name: /Ampliar Shorts|Reducir Shorts/ })).toHaveCount(0);
   const titleOverlay = viewer.getByTestId("shorts-title-overlay").first();
   await expect(titleOverlay).toHaveCSS("pointer-events", "none");
@@ -132,6 +136,7 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
   await expect(progress).toHaveText("2 de 2");
   await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-02");
+  await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubePlayCalls?: number }).mockYouTubePlayCalls)).toBe(2);
   await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeUnmuteCalls?: number }).mockYouTubeUnmuteCalls)).toBe(1);
   await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
   await expect(progress).toHaveText("1 de 2");

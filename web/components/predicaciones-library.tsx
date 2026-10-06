@@ -19,7 +19,7 @@ const ALL_VIDEOS = "__all__";
 
 type YouTubePlayerEvent = { data: number };
 type YouTubeVolumeEvent = { data: { muted: boolean; volume: number } };
-type YouTubePlayer = { destroy: () => void; unMute: () => void; setVolume: (volume: number) => void };
+type YouTubePlayer = { destroy: () => void; playVideo: () => void; unMute: () => void; setVolume: (volume: number) => void };
 type YouTubePlayerApi = {
   PlayerState: { ENDED: number };
   Player: new (element: HTMLIFrameElement, options: { events: {
@@ -100,6 +100,7 @@ function ShortsVideoFrame({ video, onEnded, soundEnabled, onSoundEnabled }: { vi
       player = new api.Player(iframe.current, {
         events: {
           onReady: (event) => {
+            event.target.playVideo();
             if (soundEnabledRef.current) {
               event.target.unMute();
               event.target.setVolume(100);
