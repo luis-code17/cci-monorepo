@@ -97,7 +97,7 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   const viewer = page.getByRole("dialog", { name: "Shorts de predicaciones" });
   await expect(viewer).toBeVisible();
   const progress = viewer.getByTestId("shorts-progress");
-  await expect(progress).toHaveText("Shorts · 1 de 2");
+  await expect(progress).toHaveText("1 de 2");
   const videoFrame = viewer.getByTestId("shorts-video-frame");
   await expect(videoFrame).toHaveAttribute("allowfullscreen", "");
   await expect(videoFrame).toHaveAttribute("allow", /fullscreen/);
@@ -110,12 +110,12 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   await expect(titleOverlay).toHaveCSS("opacity", "1");
   await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-01");
   await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
-  await expect(progress).toHaveText("Shorts · 2 de 2");
+  await expect(progress).toHaveText("2 de 2");
   await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-02");
   await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
-  await expect(progress).toHaveText("Shorts · 1 de 2");
+  await expect(progress).toHaveText("1 de 2");
   await viewer.locator("[data-short-id='e2e-video-02']").scrollIntoViewIfNeeded();
-  await expect(progress).toHaveText("Shorts · 2 de 2");
+  await expect(progress).toHaveText("2 de 2");
   const exitButton = viewer.getByRole("button", { name: "Salir de Shorts" });
   await expect(exitButton).toBeVisible();
   const viewportWidth = await page.evaluate(() => innerWidth);

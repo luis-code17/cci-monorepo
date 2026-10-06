@@ -160,9 +160,9 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
   return (
     <div data-testid="shorts-viewer" onPointerMove={revealVideoDetails} onPointerDown={revealVideoDetails} className="fixed inset-0 z-[100] bg-black text-white" role="dialog" aria-modal="true" aria-label="Shorts de predicaciones">
       <div className="fixed left-4 z-[130] flex items-center gap-2 sm:left-6" style={{ top: "max(env(safe-area-inset-top), 1.25rem)" }}>
-        <div data-testid="shorts-progress" aria-live="polite" className="rounded-full border border-white/15 bg-black/65 px-3 py-2 text-xs font-medium text-white backdrop-blur-md">Shorts · {activeIndex + 1} de {videos.length}</div>
-        <button type="button" onClick={onClose} aria-label="Salir de Shorts" className="inline-flex min-h-10 items-center justify-center gap-1 rounded-full border border-white/30 bg-white px-3 text-xs font-semibold text-black shadow-xl transition hover:bg-white/90 sm:min-h-11 sm:px-3.5">
-          <X className="h-4 w-4" aria-hidden="true" />
+        <div data-testid="shorts-progress" aria-live="polite" className="rounded-full border border-white/15 bg-black/65 px-3 py-2 text-xs font-medium text-white backdrop-blur-md">{activeIndex + 1} de {videos.length}</div>
+        <button type="button" onClick={onClose} aria-label="Salir de Shorts" className="inline-flex min-h-9 items-center justify-center gap-1 rounded-full border border-white/15 bg-black/65 px-3 text-xs font-medium text-white shadow-lg backdrop-blur-md transition hover:border-white/30 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white sm:min-h-10">
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
           <span>Salir</span>
         </button>
       </div>
