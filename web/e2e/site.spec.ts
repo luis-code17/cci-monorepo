@@ -232,15 +232,21 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   await expect(header).toHaveClass(/pointer-events-none/);
   await page.evaluate(() => window.scrollTo(0, 50));
   await expect(header).toHaveClass(/opacity-100/);
-  await expect(page.getByLabel("CCI Sabadell, inicio")).toBeVisible();
+  await expect(page.getByLabel("CCI Sabadell, inicio")).toBeHidden();
   const mobileShell = await page.locator(".site-navbar-shell").evaluate((element) => {
     const style = getComputedStyle(element);
     return { borderWidth: style.borderTopWidth, background: style.backgroundColor };
   });
-  expect(Number.parseFloat(mobileShell.borderWidth)).toBeGreaterThan(0);
-  expect(mobileShell.background).not.toBe("rgba(0, 0, 0, 0)");
+  expect(Number.parseFloat(mobileShell.borderWidth)).toBe(0);
+  expect(mobileShell.background).toBe("rgba(0, 0, 0, 0)");
   const menuButton = page.getByLabel("Abrir menú");
+  const themeButton = header.getByLabel("Cambiar tema");
   await expect(menuButton).toBeVisible();
+  await expect(themeButton).toBeVisible();
+  const [menuBounds, themeBounds] = await Promise.all([menuButton.boundingBox(), themeButton.boundingBox()]);
+  expect(menuBounds).not.toBeNull();
+  expect(themeBounds).not.toBeNull();
+  expect(menuBounds!.x + menuBounds!.width).toBeLessThan(themeBounds!.x);
   const controlsRightGap = await page.locator(".site-nav-controls").evaluate((controls) => {
     const controlsRight = controls.getBoundingClientRect().right;
     const shellRight = controls.parentElement!.getBoundingClientRect().right;
