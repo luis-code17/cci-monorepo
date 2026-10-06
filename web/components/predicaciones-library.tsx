@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, ListVideo, Maximize, Minimize, Play, PlayCircle, Search, Video, X } from "lucide-react";
 import { YouTubeVideoCard } from "@/components/youtube-video-card";
 import type { YouTubePlaylist, YouTubeVideo } from "@/lib/youtube";
@@ -16,6 +16,46 @@ type PredicacionesLibraryProps = {
 
 const PAGE_SIZE = 12;
 const ALL_VIDEOS = "__all__";
+
+type YouTubePlayerEvent = { data: number };
+type YouTubePlayer = { destroy: () => void };
+type YouTubePlayerApi = {
+  PlayerState: { ENDED: number };
+  Player: new (element: HTMLIFrameElement, options: { events: { onStateChange: (event: YouTubePlayerEvent) => void } }) => YouTubePlayer;
+};
+
+declare global {
+  interface Window {
+    YT?: YouTubePlayerApi;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+let youTubePlayerApiPromise: Promise<YouTubePlayerApi> | undefined;
+
+function loadYouTubePlayerApi() {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (!youTubePlayerApiPromise) {
+    youTubePlayerApiPromise = new Promise((resolve, reject) => {
+      const previousReady = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        previousReady?.();
+        if (window.YT?.Player) resolve(window.YT);
+        else reject(new Error("No se pudo inicializar el reproductor de YouTube."));
+      };
+      const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://www.youtube.com/iframe_api"]');
+      if (existingScript) {
+        existingScript.addEventListener("error", () => reject(new Error("No se pudo cargar la API del reproductor de YouTube.")), { once: true });
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.onerror = () => reject(new Error("No se pudo cargar la API del reproductor de YouTube."));
+      document.head.appendChild(script);
+    });
+  }
+  return youTubePlayerApiPromise;
+}
 
 function getPageItems(currentPage: number, totalPages: number): (number | "…")[] {
   const pages = Array.from(new Set([1, currentPage - 1, currentPage, currentPage + 1, totalPages]))
@@ -35,12 +75,49 @@ function getEmbedUrl(videoId: string) {
   return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 }
 
+function ShortsVideoFrame({ video, onEnded }: { video: YouTubeVideo; onEnded: () => void }) {
+  const iframe = useRef<HTMLIFrameElement>(null);
+  const onEndedRef = useRef(onEnded);
+
+  useEffect(() => { onEndedRef.current = onEnded; }, [onEnded]);
+
+  useEffect(() => {
+    let disposed = false;
+    let player: YouTubePlayer | undefined;
+    void loadYouTubePlayerApi().then((api) => {
+      if (disposed || !iframe.current) return;
+      player = new api.Player(iframe.current, {
+        events: {
+          onStateChange: (event) => {
+            if (event.data === api.PlayerState.ENDED) onEndedRef.current();
+          },
+        },
+      });
+    }).catch(() => {
+      // Keep the YouTube iframe usable if its optional player API cannot load.
+    });
+    return () => {
+      disposed = true;
+      player?.destroy();
+    };
+  }, [video.id]);
+
+  return <iframe ref={iframe} data-testid="shorts-video-frame" src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&mute=1&playsinline=1&controls=1&rel=0&fs=1&enablejsapi=1`} title={video.title} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowFullScreen className="h-full w-full border-0" />;
+}
+
 function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: () => void }) {
   const viewer = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(videos[0]?.id);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const activeIndex = Math.max(0, videos.findIndex((video) => video.id === activeId));
+
+  const advanceShort = useCallback(() => {
+    const nextVideo = videos[(activeIndex + 1) % videos.length];
+    const nextArticle = Array.from(scroller.current?.querySelectorAll<HTMLElement>("[data-short-id]") ?? [])
+      .find((article) => article.dataset.shortId === nextVideo?.id);
+    nextArticle?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeIndex, videos]);
 
   const toggleFullscreen = async () => {
     try {
@@ -94,7 +171,7 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
           <article key={video.id} data-short-id={video.id} className="relative flex h-[100dvh] snap-start snap-always items-center justify-center bg-black">
             <div className={`relative overflow-hidden ${isFullscreen ? "h-full w-full max-h-none" : "h-full max-h-[100dvh] w-full sm:aspect-[9/16] sm:h-[min(92dvh,820px)] sm:w-auto sm:rounded-2xl sm:border sm:border-white/10"}`}>
               {activeId === video.id ? (
-                <iframe data-testid="shorts-video-frame" src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&mute=1&playsinline=1&controls=1&rel=0&fs=1&loop=1&playlist=${video.id}`} title={video.title} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowFullScreen className="h-full w-full border-0" />
+                <ShortsVideoFrame video={video} onEnded={advanceShort} />
               ) : (
                 <Image src={video.thumbnail} alt="" fill sizes="(min-width: 640px) 460px, 100vw" className="object-contain" />
               )}

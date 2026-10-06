@@ -70,6 +70,27 @@ test("predicaciones keeps each panel separated and fits the viewport", async ({ 
 });
 
 test("shorts viewer stays above the footer and has a visible exit on desktop and mobile", async ({ page }) => {
+  await page.addInitScript(() => {
+    type MockWindow = Window & {
+      YT?: {
+        PlayerState: { ENDED: number };
+        Player: new (element: HTMLIFrameElement, options: { events: { onStateChange: (event: { data: number }) => void } }) => { destroy: () => void };
+      };
+      mockYouTubeVideoSrc?: string;
+      mockYouTubeEnded?: () => void;
+    };
+    const mockWindow = window as MockWindow;
+    mockWindow.YT = {
+      PlayerState: { ENDED: 0 },
+      Player: class {
+        constructor(element: HTMLIFrameElement, options: { events: { onStateChange: (event: { data: number }) => void } }) {
+          mockWindow.mockYouTubeVideoSrc = element.getAttribute("src") ?? "";
+          mockWindow.mockYouTubeEnded = () => options.events.onStateChange({ data: 0 });
+        }
+        destroy() {}
+      },
+    };
+  });
   await page.goto("/predicaciones");
   await page.getByRole("button", { name: /Ver Shorts/ }).click();
 
@@ -80,13 +101,19 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   const videoFrame = viewer.getByTestId("shorts-video-frame");
   await expect(videoFrame).toHaveAttribute("allowfullscreen", "");
   await expect(videoFrame).toHaveAttribute("allow", /fullscreen/);
-  await expect(videoFrame).toHaveAttribute("src", /loop=1/);
+  await expect(videoFrame).toHaveAttribute("src", /enablejsapi=1/);
   await viewer.getByRole("button", { name: "Ampliar Shorts" }).click();
   await expect.poll(() => viewer.evaluate((element) => document.fullscreenElement === element)).toBe(true);
   const enlargedWidth = await videoFrame.evaluate((frame) => frame.getBoundingClientRect().width);
   expect(enlargedWidth).toBeGreaterThanOrEqual(await page.evaluate(() => innerWidth - 1));
   await viewer.getByRole("button", { name: "Reducir Shorts" }).click();
   await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-01");
+  await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
+  await expect(progress).toHaveText("Shorts · 2 de 2");
+  await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-02");
+  await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
+  await expect(progress).toHaveText("Shorts · 1 de 2");
   await viewer.locator("[data-short-id='e2e-video-02']").scrollIntoViewIfNeeded();
   await expect(progress).toHaveText("Shorts · 2 de 2");
   const exitButton = viewer.getByRole("button", { name: "Salir de Shorts" });
