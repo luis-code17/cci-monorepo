@@ -235,10 +235,15 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   await expect(page.getByLabel("CCI Sabadell, inicio")).toBeHidden();
   const mobileShell = await page.locator(".site-navbar-shell").evaluate((element) => {
     const style = getComputedStyle(element);
-    return { borderWidth: style.borderTopWidth, background: style.backgroundColor };
+    const rect = element.getBoundingClientRect();
+    return { display: style.display, borderWidth: style.borderTopWidth, background: style.backgroundColor, shadow: style.boxShadow, radius: style.borderRadius, height: rect.height };
   });
+  expect(mobileShell.display).toBe("contents");
   expect(Number.parseFloat(mobileShell.borderWidth)).toBe(0);
   expect(mobileShell.background).toBe("rgba(0, 0, 0, 0)");
+  expect(mobileShell.shadow).toBe("none");
+  expect(mobileShell.radius).toBe("0px");
+  expect(mobileShell.height).toBe(0);
   const menuButton = page.getByLabel("Abrir menú");
   const themeButton = header.getByLabel("Cambiar tema");
   await expect(menuButton).toBeVisible();
@@ -247,12 +252,8 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   expect(menuBounds).not.toBeNull();
   expect(themeBounds).not.toBeNull();
   expect(menuBounds!.x + menuBounds!.width).toBeLessThan(themeBounds!.x);
-  const controlsRightGap = await page.locator(".site-nav-controls").evaluate((controls) => {
-    const controlsRight = controls.getBoundingClientRect().right;
-    const shellRight = controls.parentElement!.getBoundingClientRect().right;
-    return shellRight - controlsRight;
-  });
-  expect(controlsRightGap).toBeGreaterThanOrEqual(8);
+  const controlsRightGap = await page.locator(".site-nav-controls").evaluate((controls) => innerWidth - controls.getBoundingClientRect().right);
+  expect(controlsRightGap).toBeGreaterThanOrEqual(24);
   await menuButton.click();
   const mobileNav = page.getByRole("navigation", { name: "Menú móvil" });
   await expect(mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" })).toBeVisible();

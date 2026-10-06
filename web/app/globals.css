@@ -245,6 +245,16 @@ body {
   display: none;
 }
 
+@media (max-width: 899px) {
+  .site-navbar-shell {
+    display: contents;
+  }
+
+  .site-nav-controls {
+    right: 1.5rem;
+  }
+}
+
 @media (min-width: 900px) {
   .site-navbar-shell {
     min-height: 0;
