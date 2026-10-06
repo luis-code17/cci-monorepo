@@ -77,7 +77,16 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   await expect(viewer).toBeVisible();
   const progress = viewer.getByTestId("shorts-progress");
   await expect(progress).toHaveText("Shorts · 1 de 2");
-  await expect(viewer.getByTestId("shorts-video-frame")).not.toHaveAttribute("allowfullscreen", "");
+  const videoFrame = viewer.getByTestId("shorts-video-frame");
+  await expect(videoFrame).toHaveAttribute("allowfullscreen", "");
+  await expect(videoFrame).toHaveAttribute("allow", /fullscreen/);
+  await expect(videoFrame).toHaveAttribute("src", /loop=1/);
+  await viewer.getByRole("button", { name: "Ampliar Shorts" }).click();
+  await expect.poll(() => viewer.evaluate((element) => document.fullscreenElement === element)).toBe(true);
+  const enlargedWidth = await videoFrame.evaluate((frame) => frame.getBoundingClientRect().width);
+  expect(enlargedWidth).toBeGreaterThanOrEqual(await page.evaluate(() => innerWidth - 1));
+  await viewer.getByRole("button", { name: "Reducir Shorts" }).click();
+  await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
   await viewer.locator("[data-short-id='e2e-video-02']").scrollIntoViewIfNeeded();
   await expect(progress).toHaveText("Shorts · 2 de 2");
   const exitButton = viewer.getByRole("button", { name: "Salir de Shorts" });
