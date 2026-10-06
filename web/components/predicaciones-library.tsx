@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, ListVideo, Maximize, Minimize, Play, PlayCircle, Search, Video, X } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, ListVideo, Play, PlayCircle, Search, Video, X } from "lucide-react";
 import { YouTubeVideoCard } from "@/components/youtube-video-card";
 import type { YouTubePlaylist, YouTubeVideo } from "@/lib/youtube";
 
@@ -106,11 +106,18 @@ function ShortsVideoFrame({ video, onEnded }: { video: YouTubeVideo; onEnded: ()
 }
 
 function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: () => void }) {
-  const viewer = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(videos[0]?.id);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hiddenDetailsFor, setHiddenDetailsFor] = useState<string | null>(null);
+  const detailsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeIndex = Math.max(0, videos.findIndex((video) => video.id === activeId));
+  const showVideoDetails = hiddenDetailsFor !== activeId;
+
+  const revealVideoDetails = useCallback(() => {
+    setHiddenDetailsFor(null);
+    if (detailsTimer.current) clearTimeout(detailsTimer.current);
+    detailsTimer.current = setTimeout(() => setHiddenDetailsFor(activeId), 3200);
+  }, [activeId]);
 
   const advanceShort = useCallback(() => {
     const nextVideo = videos[(activeIndex + 1) % videos.length];
@@ -118,18 +125,6 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
       .find((article) => article.dataset.shortId === nextVideo?.id);
     nextArticle?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [activeIndex, videos]);
-
-  const toggleFullscreen = async () => {
-    try {
-      if (document.fullscreenElement === viewer.current) {
-        await document.exitFullscreen();
-        return;
-      }
-      await viewer.current?.requestFullscreen();
-    } catch {
-      // Keep the embedded YouTube fullscreen control available on browsers that block element fullscreen.
-    }
-  };
 
   useEffect(() => {
     const root = scroller.current;
@@ -155,47 +150,39 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
   }, [onClose]);
 
   useEffect(() => {
-    const syncFullscreen = () => setIsFullscreen(document.fullscreenElement === viewer.current);
-    document.addEventListener("fullscreenchange", syncFullscreen);
-    return () => document.removeEventListener("fullscreenchange", syncFullscreen);
-  }, []);
+    if (detailsTimer.current) clearTimeout(detailsTimer.current);
+    detailsTimer.current = setTimeout(() => setHiddenDetailsFor(activeId), 3200);
+    return () => {
+      if (detailsTimer.current) clearTimeout(detailsTimer.current);
+    };
+  }, [activeId]);
 
   return (
-    <div ref={viewer} data-testid="shorts-viewer" className="fixed inset-0 z-[100] bg-black text-white" role="dialog" aria-modal="true" aria-label="Shorts de predicaciones">
-      <button type="button" onClick={onClose} aria-label="Salir de Shorts" style={{ top: "max(env(safe-area-inset-top), 1rem)" }} className="fixed right-4 z-[130] inline-flex min-h-10 items-center justify-center gap-1.5 rounded-full border border-white/30 bg-white px-3 text-xs font-semibold text-black shadow-xl transition hover:bg-white/90 sm:right-6 sm:min-h-12 sm:gap-2 sm:px-4 sm:text-sm">
-        <X className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
-        <span>Salir</span>
-      </button>
+    <div data-testid="shorts-viewer" onPointerMove={revealVideoDetails} onPointerDown={revealVideoDetails} className="fixed inset-0 z-[100] bg-black text-white" role="dialog" aria-modal="true" aria-label="Shorts de predicaciones">
+      <div className="fixed left-4 z-[130] flex items-center gap-2 sm:left-6" style={{ top: "max(env(safe-area-inset-top), 1.25rem)" }}>
+        <div data-testid="shorts-progress" aria-live="polite" className="rounded-full border border-white/15 bg-black/65 px-3 py-2 text-xs font-medium text-white backdrop-blur-md">Shorts · {activeIndex + 1} de {videos.length}</div>
+        <button type="button" onClick={onClose} aria-label="Salir de Shorts" className="inline-flex min-h-10 items-center justify-center gap-1 rounded-full border border-white/30 bg-white px-3 text-xs font-semibold text-black shadow-xl transition hover:bg-white/90 sm:min-h-11 sm:px-3.5">
+          <X className="h-4 w-4" aria-hidden="true" />
+          <span>Salir</span>
+        </button>
+      </div>
       <div ref={scroller} className="h-[100dvh] snap-y snap-mandatory overflow-y-auto overscroll-contain">
         {videos.map((video) => (
           <article key={video.id} data-short-id={video.id} className="relative flex h-[100dvh] snap-start snap-always items-center justify-center bg-black">
-            <div className={`relative overflow-hidden ${isFullscreen ? "h-full w-full max-h-none" : "h-full max-h-[100dvh] w-full sm:aspect-[9/16] sm:h-[min(92dvh,820px)] sm:w-auto sm:rounded-2xl sm:border sm:border-white/10"}`}>
+            <div className="relative h-full max-h-[100dvh] w-full overflow-hidden sm:aspect-[9/16] sm:h-[min(92dvh,820px)] sm:w-auto sm:rounded-2xl sm:border sm:border-white/10">
               {activeId === video.id ? (
                 <ShortsVideoFrame video={video} onEnded={advanceShort} />
               ) : (
                 <Image src={video.thumbnail} alt="" fill sizes="(min-width: 640px) 460px, 100vw" className="object-contain" />
               )}
-              {activeId === video.id ? (
-                <button type="button" onClick={() => void toggleFullscreen()} aria-label={isFullscreen ? "Reducir Shorts" : "Ampliar Shorts"} className="absolute left-1/2 top-4 z-20 inline-flex min-h-11 -translate-x-1/2 items-center gap-2 rounded-full border border-white/25 bg-black/60 px-3 text-sm font-medium text-white shadow-lg backdrop-blur-md transition hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">
-                  {isFullscreen ? <Minimize className="h-4 w-4" aria-hidden="true" /> : <Maximize className="h-4 w-4" aria-hidden="true" />}
-                  <span>{isFullscreen ? "Reducir" : "Ampliar"}</span>
-                </button>
-              ) : null}
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/35 to-transparent px-5 pb-8 pt-24 sm:px-6">
-                <div className="min-w-0 flex-1">
-                  <p className="line-clamp-2 text-lg font-semibold drop-shadow sm:text-xl">{video.title}</p>
-                  <p className="mt-2 text-xs text-white/75">Desliza hacia arriba para ver el siguiente</p>
-                </div>
-                <Link href={video.url} target="_blank" rel="noreferrer" className="mb-0.5 inline-flex shrink-0 items-center gap-1 rounded-full border border-white/25 bg-black/40 px-3 py-2 text-xs font-semibold backdrop-blur-md">
-                  YouTube <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
+              <div data-testid="shorts-title-overlay" className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-5 pb-8 pt-24 transition-opacity duration-500 sm:px-6 ${showVideoDetails ? "opacity-100" : "opacity-0"}`}>
+                <p className="line-clamp-2 text-lg font-semibold drop-shadow sm:text-xl">{video.title}</p>
               </div>
             </div>
 
           </article>
         ))}
       </div>
-      <div data-testid="shorts-progress" aria-live="polite" className="pointer-events-none fixed left-4 z-[110] rounded-full border border-white/15 bg-black/55 px-3 py-2 text-xs font-medium text-white backdrop-blur-md sm:left-6" style={{ top: "max(env(safe-area-inset-top), 1.25rem)" }}>Shorts · {activeIndex + 1} de {videos.length}</div>
     </div>
   );
 }

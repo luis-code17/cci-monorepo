@@ -102,12 +102,12 @@ test("shorts viewer stays above the footer and has a visible exit on desktop and
   await expect(videoFrame).toHaveAttribute("allowfullscreen", "");
   await expect(videoFrame).toHaveAttribute("allow", /fullscreen/);
   await expect(videoFrame).toHaveAttribute("src", /enablejsapi=1/);
-  await viewer.getByRole("button", { name: "Ampliar Shorts" }).click();
-  await expect.poll(() => viewer.evaluate((element) => document.fullscreenElement === element)).toBe(true);
-  const enlargedWidth = await videoFrame.evaluate((frame) => frame.getBoundingClientRect().width);
-  expect(enlargedWidth).toBeGreaterThanOrEqual(await page.evaluate(() => innerWidth - 1));
-  await viewer.getByRole("button", { name: "Reducir Shorts" }).click();
-  await expect.poll(() => page.evaluate(() => document.fullscreenElement === null)).toBe(true);
+  await expect(viewer.getByRole("button", { name: /Ampliar Shorts|Reducir Shorts/ })).toHaveCount(0);
+  const titleOverlay = viewer.getByTestId("shorts-title-overlay").first();
+  await expect(titleOverlay).toHaveCSS("pointer-events", "none");
+  await expect(titleOverlay).toHaveCSS("opacity", "0", { timeout: 5000 });
+  await viewer.dispatchEvent("pointermove", { pointerType: "touch" });
+  await expect(titleOverlay).toHaveCSS("opacity", "1");
   await expect.poll(() => page.evaluate(() => (window as Window & { mockYouTubeVideoSrc?: string }).mockYouTubeVideoSrc)).toContain("e2e-video-01");
   await page.evaluate(() => (window as Window & { mockYouTubeEnded?: () => void }).mockYouTubeEnded?.());
   await expect(progress).toHaveText("Shorts · 2 de 2");
