@@ -39,6 +39,110 @@ test("main routes render without horizontal overflow", async ({ page }) => {
   }
 });
 
+test("predicaciones keeps each panel separated and fits the viewport", async ({ page }) => {
+  await page.goto("/predicaciones");
+
+  await expect(page.getByRole("heading", { name: "Encuentra una predicación" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Shorts de predicaciones" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Todos los mensajes, a tu ritmo" })).toBeVisible();
+
+  const layout = await page.getByTestId("predicaciones-panels").evaluate((container) => {
+    const panels = Array.from(container.querySelectorAll<HTMLElement>("[data-testid^='predicaciones-']"));
+    const boxes = panels.map((panel) => {
+      const rect = panel.getBoundingClientRect();
+      return { top: rect.top, bottom: rect.bottom, width: panel.clientWidth, scrollWidth: panel.scrollWidth };
+    });
+    return {
+      gaps: boxes.slice(1).map((box, index) => box.top - boxes[index].bottom),
+      panelsFit: boxes.every((box) => box.scrollWidth <= box.width),
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+    };
+  });
+
+  expect(layout.gaps.every((gap) => gap >= 28), "each panel should have visible breathing room").toBe(true);
+  expect(layout.panelsFit, "panel contents should not be clipped horizontally").toBe(true);
+  expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
+
+  await page.getByRole("button", { name: /Todos los mensajes Todo el canal/ }).click();
+  await expect(page.getByRole("heading", { name: "Todos los mensajes", exact: true })).toBeVisible();
+});
+
+test("shorts viewer stays above the footer and has a visible exit on desktop and mobile", async ({ page }) => {
+  await page.goto("/predicaciones");
+  await page.getByRole("button", { name: /Ver Shorts/ }).click();
+
+  const viewer = page.getByRole("dialog", { name: "Shorts de predicaciones" });
+  await expect(viewer).toBeVisible();
+  const progress = viewer.getByTestId("shorts-progress");
+  await expect(progress).toHaveText("Shorts · 1 de 2");
+  await expect(viewer.getByTestId("shorts-video-frame")).not.toHaveAttribute("allowfullscreen", "");
+  await viewer.locator("[data-short-id='e2e-video-02']").scrollIntoViewIfNeeded();
+  await expect(progress).toHaveText("Shorts · 2 de 2");
+  const exitButton = viewer.getByRole("button", { name: "Salir de Shorts" });
+  await expect(exitButton).toBeVisible();
+  const viewportWidth = await page.evaluate(() => innerWidth);
+  await expect(viewer.getByTestId("shorts-brand-rail")).toHaveCount(0);
+  await expect(viewer.getByTestId("shorts-progress-rail")).toHaveCount(0);
+  if (viewportWidth >= 1024) {
+    const frame = viewer.getByTestId("shorts-video-frame");
+    const frameGeometry = await frame.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, viewportWidth: innerWidth };
+    });
+    expect(frameGeometry.left).toBeGreaterThan(0);
+    expect(frameGeometry.right).toBeLessThan(frameGeometry.viewportWidth);
+  }
+  const exitGeometry = await exitButton.evaluate((button) => {
+    const rect = button.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    return {
+      top: rect.top,
+      bottom: rect.bottom,
+      right: rect.right,
+      viewportWidth: innerWidth,
+      hitTarget: hit?.closest("button")?.getAttribute("aria-label"),
+    };
+  });
+  expect(exitGeometry.top).toBeGreaterThanOrEqual(0);
+  expect(exitGeometry.bottom).toBeLessThanOrEqual(await page.evaluate(() => innerHeight));
+  expect(exitGeometry.right).toBeLessThanOrEqual(exitGeometry.viewportWidth);
+  expect(exitGeometry.hitTarget).toBe("Salir de Shorts");
+  await exitButton.click();
+  await expect(viewer).toBeHidden();
+});
+
+test("all messages use numbered pagination", async ({ page }) => {
+  await page.goto("/predicaciones");
+  await page.getByRole("button", { name: /Todos los mensajes Todo el canal/ }).click();
+  const cards = page.locator("article[role='button']");
+  await expect(cards).toHaveCount(12);
+  await expect(page.getByText("Mostrando 1–12 de 15")).toBeVisible();
+
+  await page.getByRole("button", { name: "Página siguiente" }).click();
+  await expect(cards).toHaveCount(3);
+  await expect(page.getByText("Mostrando 13–15 de 15")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Página siguiente" })).toBeDisabled();
+  await page.getByRole("button", { name: "Página anterior" }).click();
+  await expect(cards).toHaveCount(12);
+});
+
+test("sort options have an opaque background and update the selected order", async ({ page }) => {
+  await page.goto("/predicaciones");
+  await page.getByRole("button", { name: /Todos los mensajes Todo el canal/ }).click();
+  await page.getByRole("button", { name: "Ordenar mensajes" }).click();
+
+  const menu = page.getByTestId("sort-menu-surface");
+  await expect(menu).toBeVisible();
+  const background = await menu.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(background).not.toBe("rgba(0, 0, 0, 0)");
+  expect(background).not.toBe("transparent");
+
+  await menu.getByRole("option", { name: "Más antiguos" }).click();
+  await expect(page.getByRole("button", { name: "Ordenar mensajes" })).toContainText("Más antiguos");
+  await expect(menu).toBeHidden();
+});
+
 test("mobile navigation opens and reaches the donation page", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile-chromium", "Mobile drawer is specific to the mobile layout");
   await page.goto("/");
@@ -48,6 +152,13 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   await expect(header).toHaveClass(/pointer-events-none/);
   await page.evaluate(() => window.scrollTo(0, 50));
   await expect(header).toHaveClass(/opacity-100/);
+  await expect(page.getByLabel("CCI Sabadell, inicio")).toBeVisible();
+  const mobileShell = await page.locator(".site-navbar-shell").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { borderWidth: style.borderTopWidth, background: style.backgroundColor };
+  });
+  expect(Number.parseFloat(mobileShell.borderWidth)).toBeGreaterThan(0);
+  expect(mobileShell.background).not.toBe("rgba(0, 0, 0, 0)");
   const menuButton = page.getByLabel("Abrir menú");
   await expect(menuButton).toBeVisible();
   await menuButton.click();
@@ -61,7 +172,6 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
 
 test("desktop navigation replaces the mobile menu from 900 pixels", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop-chromium", "Breakpoint check runs in the desktop project");
-  await page.setViewportSize({ width: 900, height: 900 });
   await page.goto("/");
 
   const header = page.getByRole("banner");
@@ -69,13 +179,28 @@ test("desktop navigation replaces the mobile menu from 900 pixels", async ({ pag
   await expect(header).toHaveClass(/pointer-events-none/);
   await page.evaluate(() => window.scrollTo(0, 50));
   await expect(header).toHaveClass(/opacity-100/);
-  await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
-  await expect(page.getByLabel("Abrir menú")).toBeHidden();
-  const widths = await page.evaluate(() => ({
-    document: document.documentElement.scrollWidth,
-    viewport: document.documentElement.clientWidth,
-  }));
-  expect(widths.document).toBeLessThanOrEqual(widths.viewport);
+
+  for (const width of [900, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.getByRole("navigation", { name: "Principal" })).toBeVisible();
+    await expect(page.getByLabel("Abrir menú")).toBeHidden();
+    await expect(page.getByRole("navigation", { name: "Menú móvil" })).toBeHidden();
+    await expect(page.getByLabel("CCI Sabadell, inicio")).toBeHidden();
+    const shell = await page.locator(".site-navbar-shell").evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { borderWidth: style.borderTopWidth, background: style.backgroundColor, shadow: style.boxShadow };
+    });
+    expect(Number.parseFloat(shell.borderWidth)).toBe(0);
+    expect(shell.background).toBe("rgba(0, 0, 0, 0)");
+    expect(shell.shadow).toBe("none");
+    const navTop = await page.getByRole("navigation", { name: "Principal" }).evaluate((element) => element.getBoundingClientRect().top);
+    expect(navTop, `desktop navigation at ${width}px should have top spacing`).toBeGreaterThanOrEqual(16);
+    const widths = await page.evaluate(() => ({
+      document: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(widths.document, `desktop layout at ${width}px should fit the viewport`).toBeLessThanOrEqual(widths.viewport);
+  }
 });
 
 test("section navigation arrows fit a short mobile viewport", async ({ page }, testInfo) => {

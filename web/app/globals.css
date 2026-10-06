@@ -229,6 +229,21 @@ body {
 }
 
 @media (min-width: 900px) {
+  .site-navbar-shell {
+    min-height: 0;
+    margin-top: 1.25rem !important;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .site-navbar-brand {
+    display: none;
+  }
+
   .site-desktop-nav {
     display: block;
   }
@@ -240,6 +255,7 @@ body {
   .site-nav-controls {
     left: 50%;
     right: auto;
+    top: 0.375rem;
     transform: translateX(-50%);
   }
 }

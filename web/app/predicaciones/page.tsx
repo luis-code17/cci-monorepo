@@ -14,7 +14,6 @@ const youtubeChannelUrl = "https://www.youtube.com/@CentroCristianoInternacional
 
 export default async function PredicacionesPage() {
   const catalog = await getYouTubeCatalog();
-  const hasVideos = catalog.videos.length > 0;
 
   return (
     <div className="section-shell py-10 sm:py-12 lg:py-16">
@@ -39,13 +38,7 @@ export default async function PredicacionesPage() {
       </section>
 
       <section className="mt-12 section-stack">
-        {!hasVideos && (
-          <div className="alert alert-info border border-info/20 bg-info/10 text-info-content/90 shadow-sm">
-            <span>Los vídeos no están disponibles en este momento.</span>
-          </div>
-        )}
-
-        {hasVideos && <PredicacionesLibrary videos={catalog.videos} playlists={catalog.playlists} apiEnabled={catalog.apiEnabled} />}
+        <PredicacionesLibrary videos={catalog.videos} playlists={catalog.playlists} apiEnabled={catalog.apiEnabled} />
       </section>
     </div>
   );

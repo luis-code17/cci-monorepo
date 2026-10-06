@@ -55,8 +55,8 @@ export function Navbar() {
       }`}
     >
       <div className="section-shell">
-        <div className={`navbar relative mt-3 min-h-14 rounded-full border px-3 py-2 shadow-lg backdrop-blur-xl transition-colors ${hasScrolled ? "border-base-content/15 bg-base-100/90" : "border-base-content/10 bg-base-100/75"}`}>
-          <div className="navbar-start flex-1 lg:flex-none">
+        <div className={`site-navbar-shell navbar relative mt-3 min-h-14 rounded-full border px-3 py-2 shadow-lg backdrop-blur-xl transition-colors ${hasScrolled ? "border-base-content/15 bg-base-100/90" : "border-base-content/10 bg-base-100/75"}`}>
+          <div className="site-navbar-brand navbar-start flex-1 lg:flex-none">
             <Link href="/" aria-label="CCI Sabadell, inicio" className="inline-flex items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
               <BrandMark size="sm" className="h-9 w-14" />
             </Link>

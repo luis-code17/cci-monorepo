@@ -10,7 +10,7 @@ Copy `.env.example` and set the environment variables for your deployment.
 
 ## Catálogo de predicaciones de YouTube
 
-The `/predicaciones` page uses the YouTube Data API v3 to load the channel's public uploads and public playlists. Add a server-only `YOUTUBE_API_KEY` to `.env.local` and the deployment environment. Create the key in Google Cloud Console, enable **YouTube Data API v3**, and restrict the key to that API. The key is never exposed to the browser. API responses are cached for one hour. Without a key, the page falls back to the channel RSS feed and shows the latest 15 videos without playlist filters.
+The home page and `/predicaciones` load YouTube content exclusively through the YouTube Data API v3. Add a server-only `YOUTUBE_API_KEY` to `.env.local` and the deployment environment. Create the key in Google Cloud Console, enable **YouTube Data API v3**, and restrict the key to that API. The key is never exposed to the browser. API responses are cached for one hour. Without a key, or if the API request fails, YouTube videos are not shown; there is no RSS fallback.
 
 ## Local Development
 
@@ -20,7 +20,7 @@ pnpm dev
 
 ## E2E tests
 
-The Playwright harness starts its own local Next.js server and runs the browser suite in desktop and mobile Chromium contexts. Payment requests are intercepted, so tests never send real donations.
+The Playwright harness starts a local Next.js server and a YouTube API fixture, then runs the browser suite in desktop and mobile Chromium contexts. YouTube responses and payment requests are mocked, so tests do not depend on the real API or send real donations. The suite checks the Predicaciones panel spacing, Shorts exit control, and numbered pagination.
 
 ```bash
 pnpm e2e:install   # once per machine

@@ -25,17 +25,28 @@ export default defineConfig({
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
     },
   ],
-  webServer: {
-    command: "pnpm exec next dev --hostname 127.0.0.1 --port 3100",
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    env: {
-      NEXT_TELEMETRY_DISABLED: "1",
-      NEXT_DIST_DIR: ".next-e2e",
-      NEXT_PUBLIC_WORDPRESS_API_URL: "",
-      YOUTUBE_API_KEY: "",
-      NEXT_PUBLIC_SITE_URL: baseURL,
+  webServer: [
+    {
+      command: "node e2e/youtube-mock-server.mjs",
+      url: "http://127.0.0.1:3101/health",
+      name: "YouTube API fixture",
+      reuseExistingServer: !process.env.CI,
+      timeout: 10_000,
     },
-  },
+    {
+      command: "pnpm exec next dev --hostname 127.0.0.1 --port 3100",
+      url: baseURL,
+      name: "Next.js E2E",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      env: {
+        NEXT_TELEMETRY_DISABLED: "1",
+        NEXT_DIST_DIR: ".next-e2e",
+        NEXT_PUBLIC_WORDPRESS_API_URL: "",
+        YOUTUBE_API_KEY: "playwright-test-key",
+        YOUTUBE_API_BASE: "http://127.0.0.1:3101/youtube/v3",
+        NEXT_PUBLIC_SITE_URL: baseURL,
+      },
+    },
+  ],
 });
