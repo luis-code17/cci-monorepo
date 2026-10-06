@@ -31,7 +31,7 @@ export function AmountSelector({ onAmountChange }: AmountSelectorProps) {
     <section aria-labelledby="amount-title" className="space-y-5">
       <div>
         <h3 id="amount-title" className="text-sm font-semibold text-base-content">Elige tu aportación</h3>
-        <p className="mt-1 text-sm text-base-content/65">Selecciona una cantidad o introduce otra.</p>
+        <p className="mt-1 text-sm text-base-content/80">Selecciona una cantidad o introduce otra.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -43,7 +43,7 @@ export function AmountSelector({ onAmountChange }: AmountSelectorProps) {
               type="button"
               aria-pressed={active}
               onClick={() => selectAmount(amount)}
-              className={`flex min-h-14 items-center justify-between rounded-xl border px-4 text-left text-lg font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${active ? "border-primary bg-primary text-primary-content shadow-md shadow-primary/15" : "border-base-content/15 bg-base-100/70 text-base-content hover:border-primary/50 hover:bg-primary/5"}`}
+              className={`flex min-h-14 items-center justify-between rounded-xl border px-4 text-left text-lg font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${active ? "border-primary bg-primary text-primary-content shadow-md shadow-primary/15" : "border-base-content/20 bg-base-100/95 text-base-content hover:border-primary/50 hover:bg-primary/5"}`}
             >
               <span>{amount} €</span>
               {active ? <Check className="h-4 w-4" aria-hidden="true" /> : null}
@@ -53,8 +53,8 @@ export function AmountSelector({ onAmountChange }: AmountSelectorProps) {
       </div>
 
       <div>
-        <label htmlFor="customAmount" className="mb-2 block text-sm font-medium text-base-content/75">Otra cantidad</label>
-        <div className="flex h-12 items-center rounded-xl border border-base-content/15 bg-base-100/70 px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
+        <label htmlFor="customAmount" className="mb-2 block text-sm font-medium text-base-content/80">Otra cantidad</label>
+        <div className="flex h-12 items-center rounded-xl border border-base-content/30 bg-base-100/95 px-4 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
           <input
             type="text"
             inputMode="decimal"
@@ -64,11 +64,11 @@ export function AmountSelector({ onAmountChange }: AmountSelectorProps) {
             value={customAmount}
             onChange={(event) => changeCustomAmount(event.target.value)}
             aria-describedby="amount-hint"
-            className="w-full bg-transparent text-base text-base-content outline-none placeholder:text-base-content/40"
+            className="w-full bg-transparent text-base text-base-content outline-none placeholder:text-base-content/80"
           />
-          <span className="pl-3 font-semibold text-base-content/55">€</span>
+          <span className="pl-3 font-semibold text-base-content/80">€</span>
         </div>
-        <p id="amount-hint" className="mt-2 text-xs text-base-content/55">El importe mínimo es 1 €.</p>
+        <p id="amount-hint" className="mt-2 text-xs text-base-content/80">El importe mínimo es 1 €.</p>
       </div>
     </section>
   );

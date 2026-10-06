@@ -12,7 +12,7 @@ export function BlogContent({ html }: BlogContentProps) {
     .trim();
 
   if (!cleanHtml) {
-    return <p className="text-base-content/50">Sin contenido</p>;
+    return <p className="text-base-content/80">Sin contenido</p>;
   }
 
   return (

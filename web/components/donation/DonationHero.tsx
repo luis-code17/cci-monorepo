@@ -31,7 +31,7 @@ export function DonationHero({ title, subtitle, imageUrl }: DonationHeroProps) {
         </div>
 
         <div className="hidden justify-end lg:flex">
-          <div className="max-w-sm rounded-3xl border border-white/20 bg-slate-950/35 p-6 text-white shadow-xl backdrop-blur-md">
+          <div className="max-w-sm rounded-3xl border border-white/20 bg-slate-950/65 p-6 text-white shadow-xl backdrop-blur-md">
             <p className="text-sm font-semibold text-white">Una comunidad que crece unida</p>
             <p className="mt-2 text-sm leading-6 text-white/75">Cada aportación ayuda a sostener la vida y las actividades de CCI Sabadell.</p>
           </div>

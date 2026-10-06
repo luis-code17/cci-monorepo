@@ -14,14 +14,14 @@ export default async function BlogPage() {
   return (
     <div className="section-shell py-10 sm:py-12 lg:py-16">
       {/* Archive Header */}
-      <section className="max-w-3xl section-stack mb-12">
+      <section className="glass-panel max-w-3xl section-stack mb-12 rounded-3xl border border-base-content/20 p-6 shadow-lg shadow-base-content/5 sm:p-8">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-base-content/55 font-medium">Archivo</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-base-content/80 font-medium">Archivo</p>
           <h1 className="text-balance text-4xl font-semibold text-base-content sm:text-5xl md:text-6xl font-serif mt-3">
             Blog y reflexiones
           </h1>
         </div>
-        <p className="max-w-2xl text-pretty text-lg leading-8 text-base-content/75">
+        <p className="max-w-2xl text-pretty text-lg leading-8 text-base-content/80">
           Compartimos reflexiones, actualizaciones y palabras de ánimo para acompañar la vida de la comunidad.
         </p>
       </section>

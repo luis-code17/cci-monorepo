@@ -81,9 +81,9 @@ export default async function BlogDetailPage(props: { params: Params }) {
       )}
 
       {/* Article Header */}
-      <header className="mb-12 max-w-3xl mx-auto section-stack">
+      <header className="glass-panel mb-12 max-w-3xl mx-auto section-stack rounded-3xl border border-base-content/20 p-6 shadow-lg shadow-base-content/5 sm:p-8">
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">
+          <p className="text-xs uppercase tracking-[0.3em] text-base-content/80">
             {formatDateEs(post.date)}
           </p>
           <h1 className="text-balance text-4xl font-semibold text-base-content sm:text-5xl md:text-6xl font-serif leading-tight">
@@ -97,13 +97,13 @@ export default async function BlogDetailPage(props: { params: Params }) {
           </div>
           <div className="flex-1">
             <p className="font-semibold text-base-content">{post.author}</p>
-            <p className="text-sm text-base-content/60">{formatDateEs(post.date, { day: "numeric", month: "short", year: "2-digit" })}</p>
+            <p className="text-sm text-base-content/80">{formatDateEs(post.date, { day: "numeric", month: "short", year: "2-digit" })}</p>
           </div>
         </div>
       </header>
 
       {/* Article Content */}
-      <article className="max-w-3xl mx-auto mb-12">
+      <article className="glass-panel max-w-3xl mx-auto mb-12 rounded-2xl border border-base-content/20 p-6 shadow-lg shadow-base-content/5 sm:p-8">
         <BlogContent html={post.content} />
       </article>
 

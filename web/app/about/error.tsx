@@ -12,7 +12,7 @@ export default function Error({
       <div className="alert alert-error w-full">
         <span>No hay contenido disponible en este momento</span>
       </div>
-      <p className="text-sm text-base-content/70">{error.message}</p>
+      <p className="text-sm text-base-content/80">{error.message}</p>
       <button type="button" className="btn btn-primary" onClick={() => reset()}>
         Reintentar
       </button>

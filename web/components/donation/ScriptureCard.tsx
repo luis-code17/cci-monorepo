@@ -6,10 +6,10 @@ type ScriptureCardProps = {
 
 export function ScriptureCard({ title, verse, reference }: ScriptureCardProps) {
   return (
-    <article className="surface-card bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 overflow-hidden">
+    <article className="surface-card surface-card-glass overflow-hidden">
       <div className="flex h-full flex-col justify-center space-y-6 px-6 py-12 text-center sm:px-8 sm:py-14 lg:px-10">
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.3em] text-base-content/55 font-medium">Inspiración</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-base-content/80 font-medium">Inspiración</p>
           <h2 className="text-3xl font-serif font-semibold text-base-content sm:text-4xl">
             {title}
           </h2>
@@ -21,7 +21,7 @@ export function ScriptureCard({ title, verse, reference }: ScriptureCardProps) {
           </blockquote>
           
           {reference && (
-            <p className="text-sm font-medium text-base-content/60 tracking-[0.05em]">
+            <p className="text-sm font-medium text-base-content/80 tracking-[0.05em]">
               — {reference}
             </p>
           )}

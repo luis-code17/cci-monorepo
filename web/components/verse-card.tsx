@@ -19,7 +19,7 @@ export function VerseCard({ verse, reference, nextSectionId }: VerseCardProps) {
       className="shadow-[0_25px_80px_-35px_rgba(15,23,42,0.75)]"
       contentClassName="items-center justify-center pb-20 md:items-start md:justify-start"
       headerClassName="mb-4 max-w-6xl text-white"
-      overlayClassName="bg-gradient-to-r from-black/85 via-black/60 to-black/35"
+      overlayClassName="bg-gradient-to-r from-black/90 via-black/75 to-black/65"
     >
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center text-center text-white">
         <blockquote className="mx-auto max-w-4xl break-words font-sans text-[clamp(1.75rem,4vw,3.5rem)] font-normal leading-[1.15] tracking-normal text-white/90">

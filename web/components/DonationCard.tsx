@@ -14,15 +14,15 @@ export function DonationCard({
   buttonLabel = FALLBACK_DONATION_CONTENT.textoBoton,
 }: DonationCardProps) {
   return (
-    <article className="surface-card overflow-hidden">
+    <article className="surface-card surface-card-glass overflow-hidden">
       <div className="border-b border-base-200/80 bg-base-200/40 px-6 py-5 sm:px-8">
-        <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Donación central</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-base-content/80">Donación central</p>
       </div>
 
       <div className="space-y-8 p-6 sm:p-8 lg:p-10">
         <div className="mx-auto max-w-3xl space-y-4 text-center">
           <h2 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">{title}</h2>
-          <p className="text-pretty text-base leading-8 text-base-content/75 sm:text-lg">{description}</p>
+          <p className="text-pretty text-base leading-8 text-base-content/80 sm:text-lg">{description}</p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

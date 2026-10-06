@@ -62,11 +62,11 @@ export default async function HomePage() {
 {/* 
       <section className="mt-14 flex items-end justify-between gap-4">
         <div className="max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Blog reciente</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-base-content/80">Blog reciente</p>
           <h2 className="mt-2 text-balance text-3xl font-semibold text-base-content sm:text-4xl">
             Últimas publicaciones
           </h2>
-          <p className="mt-3 max-w-2xl text-pretty text-lg leading-8 text-base-content/75">
+          <p className="mt-3 max-w-2xl text-pretty text-lg leading-8 text-base-content/80">
             Aquí publicamos entradas con texto, imágenes y reflexiones de la comunidad.
           </p>
         </div>
@@ -99,7 +99,7 @@ export default async function HomePage() {
                   <div className="space-y-3">
                     <div className="badge badge-secondary badge-outline rounded-full">Video</div>
                     <h3 className="text-2xl font-semibold leading-tight">{video.title}</h3>
-                    <p className="text-sm leading-7 text-base-content/70">{video.description}</p>
+                    <p className="text-sm leading-7 text-base-content/80">{video.description}</p>
                   </div>
                   <Link href="/predicaciones" className="btn btn-sm btn-outline rounded-full w-fit">
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />

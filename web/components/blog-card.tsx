@@ -31,7 +31,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
   return (
     <Link href={`/blog/${post.slug}`}>
-      <article className="surface-card group h-full overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer flex flex-col">
+      <article className="surface-card surface-card-glass group h-full overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer flex flex-col">
         {/* Featured Image Container */}
         <figure className="relative aspect-16/10 bg-base-200 overflow-hidden shrink-0">
           {imageUrl ? (
@@ -57,7 +57,7 @@ export function BlogCard({ post }: BlogCardProps) {
         {/* Content Section */}
         <div className="space-y-4 p-5 sm:p-6 flex flex-col grow">
           {/* Metadata */}
-          <div className="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.28em] text-base-content/55 font-medium">
+          <div className="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.28em] text-base-content/80 font-medium">
             <p>{formatDateEs(post.date)}</p>
             <p className="text-right truncate">{post.author}</p>
           </div>
@@ -68,7 +68,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </h3>
 
           {/* Excerpt */}
-          <p className="text-sm leading-6 text-base-content/70 sm:text-[0.97rem] grow line-clamp-3">
+          <p className="text-sm leading-6 text-base-content/80 sm:text-[0.97rem] grow line-clamp-3">
             {excerpt}
           </p>
 

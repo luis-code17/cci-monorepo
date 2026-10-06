@@ -17,24 +17,26 @@ export default async function PredicacionesPage() {
 
   return (
     <div className="section-shell py-10 sm:py-12 lg:py-16">
-      <section className="max-w-3xl section-stack">
-        <p className="text-xs uppercase tracking-[0.3em] text-base-content/55">Predicaciones</p>
-        <h1 className="text-balance text-4xl font-semibold text-base-content sm:text-5xl md:text-6xl">
-          Mensajes y Predicaciones
-        </h1>
-        <p className="max-w-2xl text-pretty text-lg leading-8 text-base-content/75">
-          Explora los mensajes de CCI Sabadell, encuentra un tema concreto y reproduce cada predicación aquí o directamente en nuestro{" "}
-          <Link
-            href={youtubeChannelUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-primary/80 hover:decoration-primary"
-          >
-            canal de YouTube
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          .
-        </p>
+      <section className="glass-panel w-full section-stack rounded-3xl border border-base-content/20 p-6 shadow-lg shadow-base-content/5 sm:p-8">
+        <div className="max-w-4xl">
+          <p className="text-xs uppercase tracking-[0.3em] text-base-content/80">Predicaciones</p>
+          <h1 className="text-balance text-4xl font-semibold text-base-content sm:text-5xl md:text-6xl">
+            Mensajes y Predicaciones
+          </h1>
+          <p className="max-w-2xl text-pretty text-lg leading-8 text-base-content/80">
+            Explora los mensajes de CCI Sabadell, encuentra un tema concreto y reproduce cada predicación aquí o directamente en nuestro{" "}
+            <Link
+              href={youtubeChannelUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 whitespace-nowrap font-semibold text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-primary/80 hover:decoration-primary"
+            >
+              canal de YouTube
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            .
+          </p>
+        </div>
       </section>
 
       <section className="mt-12 section-stack">

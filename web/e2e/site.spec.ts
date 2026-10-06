@@ -20,7 +20,7 @@ test("home renders and its shared background stays fixed without tiling", async 
   expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
 });
 
-test("home preaching section uses the swapped light and dark backgrounds", async ({ page }) => {
+test("home preaching section matches its background image to the selected theme", async ({ page }) => {
   await page.goto("/");
 
   const backgrounds = await page.locator("#predicaciones-section").evaluate((section) =>
@@ -30,11 +30,37 @@ test("home preaching section uses the swapped light and dark backgrounds", async
     })),
   );
   expect(backgrounds).toMatchObject({
-    "section-theme-light": "/predicaciones_dark.jpeg",
-    "section-theme-dark": "/predicaciones_light.jpeg",
-    "section-theme-mobile": "/predicaciones_dark.jpeg",
-    "section-theme-mobile-dark": "/predicaciones_mobile.jpeg",
+    "section-theme-light": "/predicaciones_light.jpeg",
+    "section-theme-dark": "/predicaciones_dark.jpeg",
+    "section-theme-mobile": "/predicaciones_light.jpeg",
+    "section-theme-mobile-dark": "/predicaciones_dark.jpeg",
   });
+});
+
+test("interior pages share the same background by theme", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("cci-theme", "light"));
+  const routes = ["/about", "/ofrendas", "/predicaciones"];
+  const setTheme = (theme: "light" | "dark") => page.evaluate((value) => {
+    localStorage.setItem("cci-theme", value);
+    document.documentElement.setAttribute("data-theme", value);
+  }, theme);
+  const readBackground = () => page.locator(".route-background-layer").evaluate((element) => getComputedStyle(element).backgroundImage);
+
+  for (const route of routes) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(route);
+    await setTheme("light");
+    await expect.poll(readBackground).toContain("fondo_pc_light.png");
+
+    await setTheme("dark");
+    await expect.poll(readBackground).toContain("fondo_pc_dark.png");
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(readBackground).toContain("fondo_mobile_dark.png");
+
+    await setTheme("light");
+    await expect.poll(readBackground).toContain("fondo_mobile_light.png");
+  }
 });
 
 test("main routes render without horizontal overflow", async ({ page }) => {

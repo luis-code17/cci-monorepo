@@ -31,7 +31,7 @@ export function MobileMenu() {
         className="drawer-overlay bg-base-content/10"
       />
 
-      <div className="relative flex min-h-dvh w-full flex-col items-center bg-base-100/30 px-6 py-16 text-base-content shadow-2xl backdrop-blur-sm">
+      <div className="relative flex min-h-dvh w-full flex-col items-center bg-base-100/98 px-6 py-16 text-base-content shadow-2xl backdrop-blur-2xl">
         {/* Botón X */}
         <label
           htmlFor="site-drawer"
@@ -73,7 +73,7 @@ export function MobileMenu() {
 
         {/* Tema */}
         <div className="flex shrink-0 flex-col items-center gap-2">
-          <span className="text-xs font-medium uppercase tracking-[0.3em] text-base-content/55">
+          <span className="text-xs font-medium uppercase tracking-[0.3em] text-base-content/80">
             Tema
           </span>
           <ThemeToggle />

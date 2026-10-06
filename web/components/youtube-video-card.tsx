@@ -9,6 +9,7 @@ type YouTubeVideoCardProps = {
   video: YouTubeVideo;
   onPlay: (video: YouTubeVideo) => void;
   sizes?: string;
+  glass?: boolean;
 };
 
 function formatDateEs(value: string) {
@@ -24,10 +25,10 @@ function formatDateEs(value: string) {
   }).format(date);
 }
 
-export function YouTubeVideoCard({ video, onPlay, sizes = "(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw" }: YouTubeVideoCardProps) {
+export function YouTubeVideoCard({ video, onPlay, sizes = "(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw", glass = false }: YouTubeVideoCardProps) {
   return (
     <article
-      className="group cursor-pointer overflow-hidden rounded-2xl border border-base-content/20 bg-base-content/10 shadow-sm backdrop-blur-2xl transition hover:-translate-y-0.5 hover:bg-base-content/15 hover:shadow-lg"
+      className={`group cursor-pointer overflow-hidden rounded-2xl border border-base-content/20 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg ${glass ? "glass-panel" : "bg-base-100/90 hover:bg-base-100/95"}`}
       onClick={() => onPlay(video)}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -49,7 +50,7 @@ export function YouTubeVideoCard({ video, onPlay, sizes = "(min-width: 1280px) 3
       </div>
 
       <div className="space-y-3 p-4">
-        <div className="flex items-center gap-2 text-xs text-base-content/55">
+        <div className="flex items-center gap-2 text-xs text-base-content/80">
           <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
           <span>{formatDateEs(video.publishedAt)}</span>
         </div>

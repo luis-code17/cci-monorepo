@@ -286,69 +286,69 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
 
   return (
     <div className="space-y-8 sm:space-y-10 lg:space-y-12" data-testid="predicaciones-panels">
-      <section data-testid="predicaciones-collections" className="rounded-[1.75rem] border border-base-content/10 bg-base-100/55 px-5 py-6 shadow-lg shadow-base-content/5 backdrop-blur-xl sm:px-8 sm:py-8">
+      <section data-testid="predicaciones-collections" className="glass-panel rounded-[1.75rem] border border-base-content/20 px-5 py-6 shadow-lg shadow-base-content/5 sm:px-8 sm:py-8">
         <div className="mb-5 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.24em] text-primary">Colecciones</p>
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Encuentra una predicación</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-base-content/65">Selecciona una lista para abrir sus mensajes. También puedes entrar a todos los vídeos del canal.</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-base-content/80">Selecciona una lista para abrir sus mensajes. También puedes entrar a todos los vídeos del canal.</p>
           </div>
-          <span className="flex w-fit items-center gap-2 rounded-full border border-base-content/10 bg-base-100/70 px-3 py-2 text-xs text-base-content/60"><Video className="h-4 w-4 text-primary" aria-hidden="true" />{videos.length} mensajes</span>
+          <span className="flex w-fit items-center gap-2 rounded-full border border-base-content/15 bg-base-100/95 px-3 py-2 text-xs text-base-content/80"><Video className="h-4 w-4 text-primary" aria-hidden="true" />{videos.length} mensajes</span>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-label="Listas de predicaciones">
           {orderedPlaylists.map((item) => (
-            <button key={item.id} type="button" onClick={() => chooseSelection(item.id)} aria-pressed={selection === item.id} className={`group flex min-h-28 items-center gap-4 rounded-2xl border p-3 text-left transition sm:p-4 ${selection === item.id ? "border-primary bg-primary/10 ring-1 ring-primary/30" : "border-base-content/10 bg-base-100/45 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-base-100/90"}`}>
+            <button key={item.id} type="button" onClick={() => chooseSelection(item.id)} aria-pressed={selection === item.id} className={`group flex min-h-28 items-center gap-4 rounded-2xl border p-3 text-left transition sm:p-4 ${selection === item.id ? "border-primary bg-primary/10 ring-1 ring-primary/30" : "border-base-content/15 bg-base-100/80 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-base-100/90"}`}>
               <span className="relative h-20 w-28 shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-20 sm:w-32">
                 {item.thumbnail ? <Image src={item.thumbnail} alt="" fill sizes="128px" className="object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full items-center justify-center text-primary"><ListVideo className="h-7 w-7" aria-hidden="true" /></span>}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block line-clamp-2 text-sm font-semibold leading-snug sm:text-base">{item.title}</span>
-                <span className="mt-2 block text-xs text-base-content/55">{item.videoCount} {item.videoCount === 1 ? "mensaje" : "mensajes"}</span>
+                <span className="mt-2 block text-xs text-base-content/80">{item.videoCount} {item.videoCount === 1 ? "mensaje" : "mensajes"}</span>
               </span>
               <Play className="mr-1 h-4 w-4 shrink-0 text-primary opacity-70 transition group-hover:translate-x-0.5" aria-hidden="true" />
             </button>
           ))}
-          <button type="button" onClick={() => chooseSelection(ALL_VIDEOS)} aria-pressed={allSelected} className={`group flex min-h-28 items-center gap-4 rounded-2xl border p-3 text-left transition sm:p-4 ${allSelected ? "border-primary bg-primary/10 ring-1 ring-primary/30" : "border-base-content/10 bg-base-100/45 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-base-100/90"}`}>
+          <button type="button" onClick={() => chooseSelection(ALL_VIDEOS)} aria-pressed={allSelected} className={`group flex min-h-28 items-center gap-4 rounded-2xl border p-3 text-left transition sm:p-4 ${allSelected ? "border-primary bg-primary/10 ring-1 ring-primary/30" : "border-base-content/15 bg-base-100/80 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-base-100/90"}`}>
             <span className="flex h-20 w-28 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 via-primary/5 to-secondary/15 text-primary sm:h-20 sm:w-32"><ListVideo className="h-8 w-8" aria-hidden="true" /></span>
-            <span className="min-w-0 flex-1"><span className="block text-sm font-semibold sm:text-base">Todos los mensajes</span><span className="mt-2 block text-xs text-base-content/55">Todo el canal · {videos.length} vídeos</span></span>
+            <span className="min-w-0 flex-1"><span className="block text-sm font-semibold sm:text-base">Todos los mensajes</span><span className="mt-2 block text-xs text-base-content/80">Todo el canal · {videos.length} vídeos</span></span>
             <Play className="mr-1 h-4 w-4 shrink-0 text-primary opacity-70 transition group-hover:translate-x-0.5" aria-hidden="true" />
           </button>
         </div>
-        {!apiEnabled ? <p className="mt-4 rounded-xl bg-base-content/5 px-4 py-3 text-sm text-base-content/65">No se pudo cargar el catálogo de YouTube. Comprueba la clave de API y vuelve a intentarlo.</p> : null}
+        {!apiEnabled ? <p role="alert" className="mt-4 rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-status-error">No se pudo cargar el catálogo de YouTube. Comprueba la clave de API y vuelve a intentarlo.</p> : null}
       </section>
 
-      <section data-testid="predicaciones-shorts" className="overflow-hidden rounded-[1.75rem] border border-base-content/10 bg-gradient-to-br from-primary/10 via-base-100/65 to-secondary/10 shadow-lg shadow-base-content/5 backdrop-blur-xl">
+      <section data-testid="predicaciones-shorts" className="glass-panel overflow-hidden rounded-[1.75rem] border border-base-content/20 shadow-lg shadow-base-content/5">
         <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7">
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-content shadow-lg shadow-primary/20"><Play className="ml-0.5 h-6 w-6 fill-current" aria-hidden="true" /></div>
-            <div><p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Para ver en vertical</p><h2 className="mt-1 text-xl font-semibold sm:text-2xl">Shorts de predicaciones</h2><p className="mt-1 text-sm text-base-content/65">Un vídeo cada vez. Desliza hacia arriba para continuar.</p></div>
+            <div><p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Para ver en vertical</p><h2 className="mt-1 text-xl font-semibold sm:text-2xl">Shorts de predicaciones</h2><p className="mt-1 text-sm text-base-content/80">Un vídeo cada vez. Desliza hacia arriba para continuar.</p></div>
           </div>
           <button type="button" onClick={() => setShortsOpen(true)} disabled={shorts.length === 0} className="btn btn-primary min-h-12 rounded-full px-6 disabled:opacity-45"><PlayCircle className="h-5 w-5" aria-hidden="true" />Ver Shorts <span className="rounded-full bg-primary-content/15 px-2 py-0.5 text-xs">{shorts.length}</span></button>
         </div>
       </section>
 
-      <section data-testid="predicaciones-library" className="rounded-[1.75rem] border border-base-content/10 bg-base-100/45 p-5 shadow-lg shadow-base-content/5 backdrop-blur-xl sm:p-8">
+      <section data-testid="predicaciones-library" className="glass-panel rounded-[1.75rem] border border-base-content/20 p-5 shadow-lg shadow-base-content/5 sm:p-8">
         {!hasSelection ? (
-          <div className="py-7 text-center sm:py-10"><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary"><ListVideo className="h-6 w-6" aria-hidden="true" /></div><h2 className="mt-4 text-xl font-semibold">Todos los mensajes, a tu ritmo</h2><p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-base-content/60">Elige una colección arriba o abre “Todos los mensajes” para mostrar aquí el catálogo completo.</p></div>
+          <div className="py-7 text-center sm:py-10"><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary"><ListVideo className="h-6 w-6" aria-hidden="true" /></div><h2 className="mt-4 text-xl font-semibold">Todos los mensajes, a tu ritmo</h2><p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-base-content/80">Elige una colección arriba o abre “Todos los mensajes” para mostrar aquí el catálogo completo.</p></div>
         ) : (
           <>
             <div className="mb-5 flex flex-col gap-4 border-b border-base-content/10 pb-5 lg:flex-row lg:items-end lg:justify-between">
-              <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Biblioteca</p><h2 className="mt-1 truncate text-xl font-semibold sm:text-2xl">{selectedPlaylist?.title ?? "Todos los mensajes"}</h2><p className="mt-1 text-sm text-base-content/55">{filteredVideos.length} {filteredVideos.length === 1 ? "resultado" : "resultados"}{query.trim() ? ` para “${query.trim()}”` : ""}</p></div>
-              <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-xl border-base-content/15 bg-base-100/70 lg:max-w-md">
-                <Search className="h-4 w-4 shrink-0 text-base-content/45" aria-hidden="true" /><span className="sr-only">Buscar en {selectedPlaylist?.title ?? "todos los mensajes"}</span>
+              <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Biblioteca</p><h2 className="mt-1 truncate text-xl font-semibold sm:text-2xl">{selectedPlaylist?.title ?? "Todos los mensajes"}</h2><p className="mt-1 text-sm text-base-content/80">{filteredVideos.length} {filteredVideos.length === 1 ? "resultado" : "resultados"}{query.trim() ? ` para “${query.trim()}”` : ""}</p></div>
+              <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-xl border-base-content/30 bg-base-100/95 lg:max-w-md">
+                <Search className="h-4 w-4 shrink-0 text-base-content/80" aria-hidden="true" /><span className="sr-only">Buscar en {selectedPlaylist?.title ?? "todos los mensajes"}</span>
                 <input ref={searchInputRef} type="search" value={query} onChange={(event) => changeQuery(event.target.value)} placeholder={selectedPlaylist ? `Buscar en ${selectedPlaylist.title}` : "Buscar en todos los mensajes"} className="min-w-0 grow text-sm" />
                 {query ? <button type="button" onClick={() => changeQuery("")} className="btn btn-ghost btn-xs btn-circle" aria-label="Limpiar búsqueda"><X className="h-4 w-4" aria-hidden="true" /></button> : null}
               </label>
             </div>
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-sm text-base-content/60">
+              <div className="flex items-center gap-2 text-sm text-base-content/80">
                 <ArrowDownWideNarrow className="h-4 w-4" aria-hidden="true" />
                 <span className="font-medium">Orden:</span>
                 <div ref={sortMenuRef} className="relative">
                   <button type="button" aria-label="Ordenar mensajes" aria-haspopup="listbox" aria-expanded={sortOpen} onClick={() => setSortOpen((open) => !open)} className="inline-flex min-h-9 min-w-40 items-center justify-between gap-3 rounded-xl border border-base-content/15 bg-base-100 px-3 py-1.5 text-left font-medium text-base-content shadow-sm hover:bg-base-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
                     {sort === "recent" ? "Más recientes" : sort === "oldest" ? "Más antiguos" : "Título A–Z"}
-                    <ChevronDown className={`h-4 w-4 text-base-content/55 transition-transform ${sortOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+                    <ChevronDown className={`h-4 w-4 text-base-content/80 transition-transform ${sortOpen ? "rotate-180" : ""}`} aria-hidden="true" />
                   </button>
                   {sortOpen ? (
                     <div data-testid="sort-menu-surface" role="listbox" aria-label="Ordenar mensajes" className="absolute left-0 top-full z-40 mt-2 min-w-full overflow-hidden rounded-xl border border-base-content/15 bg-base-100 p-1.5 text-base-content shadow-2xl ring-1 ring-base-content/10">
@@ -365,22 +365,22 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
             </div>
             {visibleVideos.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">{visibleVideos.map((video) => <YouTubeVideoCard key={video.id} video={video} onPlay={setActiveVideo} />)}</div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">{visibleVideos.map((video) => <YouTubeVideoCard key={video.id} video={video} onPlay={setActiveVideo} glass />)}</div>
                 {totalPages > 1 ? (
                   <nav aria-label="Paginación de mensajes" className="mt-8 flex flex-col items-center gap-3 border-t border-base-content/10 pt-5 sm:flex-row sm:justify-between">
-                    <p className="text-xs text-base-content/55">Mostrando {firstVisibleVideo}–{lastVisibleVideo} de {filteredVideos.length}</p>
+                    <p className="text-xs text-base-content/80">Mostrando {firstVisibleVideo}–{lastVisibleVideo} de {filteredVideos.length}</p>
                     <div className="flex items-center gap-2">
                       <button type="button" onClick={() => setCurrentPage((value) => Math.max(1, value - 1))} disabled={page === 1} aria-label="Página anterior" className="btn btn-sm btn-ghost rounded-full border border-base-content/10 px-3 disabled:opacity-40"><ArrowLeft className="h-4 w-4" aria-hidden="true" /><span className="hidden sm:inline">Anterior</span></button>
-                      <span className="text-xs font-medium text-base-content/60 sm:hidden">{page} / {totalPages}</span>
+                      <span className="text-xs font-medium text-base-content/80 sm:hidden">{page} / {totalPages}</span>
                       <div className="hidden items-center gap-1 sm:flex">
-                        {getPageItems(page, totalPages).map((item, index) => item === "…" ? <span key={`ellipsis-${index}`} className="px-1 text-base-content/45" aria-hidden="true">…</span> : <button key={item} type="button" onClick={() => setCurrentPage(item)} aria-label={`Ir a la página ${item}`} aria-current={page === item ? "page" : undefined} className={`btn btn-sm min-w-9 rounded-full px-2 ${page === item ? "btn-primary" : "btn-ghost"}`}>{item}</button>)}
+                        {getPageItems(page, totalPages).map((item, index) => item === "…" ? <span key={`ellipsis-${index}`} className="px-1 text-base-content/80" aria-hidden="true">…</span> : <button key={item} type="button" onClick={() => setCurrentPage(item)} aria-label={`Ir a la página ${item}`} aria-current={page === item ? "page" : undefined} className={`btn btn-sm min-w-9 rounded-full px-2 ${page === item ? "btn-primary" : "btn-ghost"}`}>{item}</button>)}
                       </div>
                       <button type="button" onClick={() => setCurrentPage((value) => Math.min(totalPages, value + 1))} disabled={page === totalPages} aria-label="Página siguiente" className="btn btn-sm btn-ghost rounded-full border border-base-content/10 px-3 disabled:opacity-40"><span className="hidden sm:inline">Siguiente</span><ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
                     </div>
                   </nav>
                 ) : null}
               </>
-            ) : <div className="rounded-2xl border border-dashed border-base-content/20 px-6 py-12 text-center"><Search className="mx-auto h-7 w-7 text-base-content/35" aria-hidden="true" /><p className="mt-3 font-semibold">No encontramos mensajes con esa búsqueda.</p><button type="button" onClick={() => changeQuery("")} className="btn btn-ghost mt-2 rounded-full">Limpiar búsqueda</button></div>}
+            ) : <div className="rounded-2xl border border-dashed border-base-content/20 px-6 py-12 text-center"><Search className="mx-auto h-7 w-7 text-base-content/80" aria-hidden="true" /><p className="mt-3 font-semibold">No encontramos mensajes con esa búsqueda.</p><button type="button" onClick={() => changeQuery("")} className="btn btn-ghost mt-2 rounded-full">Limpiar búsqueda</button></div>}
           </>
         )}
       </section>
@@ -388,7 +388,7 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
       {shortsOpen && shorts.length > 0 && typeof document !== "undefined" ? createPortal(<ShortsViewer videos={shorts} onClose={closeShorts} />, document.body) : null}
       <dialog className={`modal ${activeVideo ? "modal-open" : ""}`} open={Boolean(activeVideo)} onClose={() => setActiveVideo(null)}>
         <div className="modal-box w-11/12 max-w-5xl overflow-hidden p-0">
-          {activeVideo ? <div className="space-y-4 p-4 sm:p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs uppercase tracking-[0.2em] text-base-content/55">{formatDateEs(activeVideo.publishedAt)}</p><h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{activeVideo.title}</h2></div><button type="button" onClick={() => setActiveVideo(null)} className="btn btn-sm btn-circle btn-ghost" aria-label="Cerrar vídeo"><X className="h-4 w-4" aria-hidden="true" /></button></div><div className="aspect-video overflow-hidden rounded-xl bg-black"><iframe src={getEmbedUrl(activeVideo.id)} title={activeVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="h-full w-full" /></div><div className="flex justify-end"><Link href={activeVideo.url} target="_blank" rel="noreferrer" className="btn btn-primary rounded-full">Abrir en YouTube <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></Link></div></div> : null}
+          {activeVideo ? <div className="space-y-4 p-4 sm:p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs uppercase tracking-[0.2em] text-base-content/80">{formatDateEs(activeVideo.publishedAt)}</p><h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{activeVideo.title}</h2></div><button type="button" onClick={() => setActiveVideo(null)} className="btn btn-sm btn-circle btn-ghost" aria-label="Cerrar vídeo"><X className="h-4 w-4" aria-hidden="true" /></button></div><div className="aspect-video overflow-hidden rounded-xl bg-black"><iframe src={getEmbedUrl(activeVideo.id)} title={activeVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen className="h-full w-full" /></div><div className="flex justify-end"><Link href={activeVideo.url} target="_blank" rel="noreferrer" className="btn btn-primary rounded-full">Abrir en YouTube <ArrowUpRight className="h-4 w-4" aria-hidden="true" /></Link></div></div> : null}
         </div>
         <form method="dialog" className="modal-backdrop"><button type="submit" aria-label="Cerrar vídeo" onClick={() => setActiveVideo(null)}>cerrar</button></form>
       </dialog>

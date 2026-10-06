@@ -13,20 +13,20 @@ export function PaymentMethodCard({ title, description, icon, status = "soon" }:
   const Icon = icon === "smartphone" ? Smartphone : icon === "landmark" ? Landmark : CreditCard;
 
   return (
-    <article className={`flex h-full flex-col rounded-2xl border p-5 shadow-sm backdrop-blur-xl transition duration-200 sm:p-6 ${available ? "border-primary/30 bg-primary/5 shadow-primary/5" : "border-base-content/15 bg-base-content/5"}`}>
+    <article className={`glass-panel flex h-full flex-col rounded-2xl border p-5 shadow-sm transition duration-200 sm:p-6 ${available ? "border-primary/30 shadow-primary/5" : "border-base-content/15"}`}>
       <div className="flex items-start gap-4">
-        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${available ? "bg-primary text-primary-content" : "bg-base-content/10 text-base-content/65"}`}>
+        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${available ? "bg-primary text-primary-content" : "bg-base-content/10 text-base-content/80"}`}>
           <Icon className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-serif text-xl font-semibold text-base-content sm:text-2xl">{title}</h3>
-            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${available ? "bg-success/15 text-success" : "bg-base-content/10 text-base-content/60"}`}>
+            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${available ? "bg-success/20 text-status-success" : "bg-base-content/10 text-base-content/80"}`}>
               {available ? <Check className="h-3 w-3" aria-hidden="true" /> : <Clock3 className="h-3 w-3" aria-hidden="true" />}
               {available ? "Disponible" : "Próximamente"}
             </span>
           </div>
-          <p className="mt-2 text-sm leading-6 text-base-content/70">{description}</p>
+          <p className="mt-2 text-sm leading-6 text-base-content/80">{description}</p>
         </div>
       </div>
       {available ? (

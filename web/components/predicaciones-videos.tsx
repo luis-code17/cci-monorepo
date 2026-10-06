@@ -65,10 +65,10 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
         eyebrow="Predicaciones"
         title="Predicaciones y mensajes"
         background={{
-          light: "/predicaciones_dark.jpeg",
-          dark: "/predicaciones_light.jpeg",
-          mobile: "/predicaciones_dark.jpeg",
-          mobileDark: "/predicaciones_mobile.jpeg",
+          light: "/predicaciones_light.jpeg",
+          dark: "/predicaciones_dark.jpeg",
+          mobile: "/predicaciones_light.jpeg",
+          mobileDark: "/predicaciones_dark.jpeg",
         }}
         arrow={nextSectionId ? { href: nextSectionId, label: "Desplazarse al siguiente contenido" } : undefined}
         priority
@@ -114,7 +114,7 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
             <div className="space-y-4 p-4 sm:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-[0.28em] text-base-content/55 font-medium">
+                  <p className="text-xs uppercase tracking-[0.28em] text-base-content/80 font-medium">
                     {formatDateEs(activeVideo.publishedAt) || "Vídeo reciente"}
                   </p>
                   <h3 className="text-balance text-2xl font-semibold leading-tight text-base-content sm:text-3xl font-serif">
@@ -131,7 +131,7 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
               {activeVideo.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {activeVideo.tags.map((tag) => (
-                    <span key={tag} className="rounded-full bg-base-200 px-3 py-1 text-xs font-medium text-base-content/70">
+                    <span key={tag} className="rounded-full bg-base-200 px-3 py-1 text-xs font-medium text-base-content/80">
                       #{tag}
                     </span>
                   ))}
@@ -151,7 +151,7 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm text-base-content/60">
+                <p className="text-sm text-base-content/80">
                   Reproducción embebida para ver el mensaje sin salir de la página.
                 </p>
                 <Link

@@ -51,33 +51,33 @@ export function ContactForm() {
     >
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="space-y-1">
-          <span className="text-xs uppercase tracking-[0.22em] text-base-content/45">Nombre</span>
-          <input name="name" required className="input input-bordered w-full rounded-xl bg-base-100" placeholder="Tu nombre" />
+          <span className="text-xs uppercase tracking-[0.22em] text-base-content/80">Nombre</span>
+          <input name="name" required className="input input-bordered w-full rounded-xl border-base-content/30 bg-base-100" placeholder="Tu nombre" />
         </label>
 
         <label className="space-y-1">
-          <span className="text-xs uppercase tracking-[0.22em] text-base-content/45">Email</span>
-          <input name="email" type="email" required className="input input-bordered w-full rounded-xl bg-base-100" placeholder="tu@email.com" />
+          <span className="text-xs uppercase tracking-[0.22em] text-base-content/80">Email</span>
+          <input name="email" type="email" required className="input input-bordered w-full rounded-xl border-base-content/30 bg-base-100" placeholder="tu@email.com" />
         </label>
       </div>
 
       <label className="space-y-1 block">
-        <span className="text-xs uppercase tracking-[0.22em] text-base-content/45">Asunto</span>
-        <input name="subject" required className="input input-bordered w-full rounded-xl bg-base-100" placeholder="Motivo de tu mensaje" />
+        <span className="text-xs uppercase tracking-[0.22em] text-base-content/80">Asunto</span>
+        <input name="subject" required className="input input-bordered w-full rounded-xl border-base-content/30 bg-base-100" placeholder="Motivo de tu mensaje" />
       </label>
 
       <label className="space-y-1 block">
-        <span className="text-xs uppercase tracking-[0.22em] text-base-content/45">Mensaje</span>
+        <span className="text-xs uppercase tracking-[0.22em] text-base-content/80">Mensaje</span>
         <textarea
           name="message"
           required
           rows={5}
-          className="textarea textarea-bordered w-full rounded-xl bg-base-100"
+          className="textarea textarea-bordered w-full rounded-xl border-base-content/30 bg-base-100"
           placeholder="Cuéntanos en qué te podemos ayudar"
         />
       </label>
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error && <p className="text-sm text-status-error">{error}</p>}
 
       <button
         type="submit"
@@ -89,7 +89,7 @@ export function ContactForm() {
       </button>
 
       {status === 'success' ? (
-        <p className="text-center text-sm text-base-content/65">Gracias. Te responderemos lo antes posible.</p>
+        <p className="text-center text-sm text-base-content/80">Gracias. Te responderemos lo antes posible.</p>
       ) : null}
     </form>
   );

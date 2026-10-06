@@ -67,14 +67,14 @@ export function DonationForm() {
       <AmountSelector onAmountChange={setAmount} />
       {error && <div role="alert" className="alert alert-error py-3 text-sm">{error}</div>}
       <div className="space-y-3 border-t border-base-content/10 pt-5">
-        {formattedAmount ? <p className="text-center text-sm text-base-content/70">Aportación seleccionada: <strong className="text-base-content">{formattedAmount}</strong></p> : null}
+        {formattedAmount ? <p className="text-center text-sm text-base-content/80">Aportación seleccionada: <strong className="text-base-content">{formattedAmount}</strong></p> : null}
         <button type="submit" disabled={busy || !amount || amount < 1} className="btn btn-primary h-13 w-full rounded-xl text-base font-semibold shadow-lg shadow-primary/15 disabled:shadow-none">
           {status === 'creating' ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : <CreditCard className="h-5 w-5" aria-hidden="true" />}
           {status === 'creating' ? 'Preparando pago…' : status === 'redirecting' ? 'Redirigiendo…' : 'Donar con tarjeta'}
           {status === 'idle' || status === 'error' ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : null}
         </button>
-        <p className="text-center text-xs leading-5 text-base-content/60">Pago seguro procesado por Redsys. El importe se cargará una sola vez.</p>
-        {status === 'redirecting' ? <p role="status" className="text-center text-sm text-base-content/65">Redirigiendo a la pasarela de pago…</p> : null}
+        <p className="text-center text-xs leading-5 text-base-content/80">Pago seguro procesado por Redsys. El importe se cargará una sola vez.</p>
+        {status === 'redirecting' ? <p role="status" className="text-center text-sm text-base-content/80">Redirigiendo a la pasarela de pago…</p> : null}
       </div>
     </form>
   );
