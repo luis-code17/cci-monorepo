@@ -103,6 +103,7 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
   const [sort, setSort] = useState("recent");
   const [sortOpen, setSortOpen] = useState(false);
   const sortMenuRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [activeVideo, setActiveVideo] = useState<YouTubeVideo | null>(null);
   const [shortsOpen, setShortsOpen] = useState(false);
@@ -131,6 +132,14 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
       document.removeEventListener("keydown", closeOnEscape);
     };
   }, [sortOpen]);
+
+  useEffect(() => {
+    if (!selection || !window.matchMedia("(max-width: 639px)").matches) return;
+    const frame = window.requestAnimationFrame(() => {
+      searchInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [selection]);
 
   const filteredVideos = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("es");
@@ -215,7 +224,7 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
               <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Biblioteca</p><h2 className="mt-1 truncate text-xl font-semibold sm:text-2xl">{selectedPlaylist?.title ?? "Todos los mensajes"}</h2><p className="mt-1 text-sm text-base-content/55">{filteredVideos.length} {filteredVideos.length === 1 ? "resultado" : "resultados"}{query.trim() ? ` para “${query.trim()}”` : ""}</p></div>
               <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-xl border-base-content/15 bg-base-100/70 lg:max-w-md">
                 <Search className="h-4 w-4 shrink-0 text-base-content/45" aria-hidden="true" /><span className="sr-only">Buscar en {selectedPlaylist?.title ?? "todos los mensajes"}</span>
-                <input type="search" value={query} onChange={(event) => changeQuery(event.target.value)} placeholder={selectedPlaylist ? `Buscar en ${selectedPlaylist.title}` : "Buscar en todos los mensajes"} className="min-w-0 grow text-sm" />
+                <input ref={searchInputRef} type="search" value={query} onChange={(event) => changeQuery(event.target.value)} placeholder={selectedPlaylist ? `Buscar en ${selectedPlaylist.title}` : "Buscar en todos los mensajes"} className="min-w-0 grow text-sm" />
                 {query ? <button type="button" onClick={() => changeQuery("")} className="btn btn-ghost btn-xs btn-circle" aria-label="Limpiar búsqueda"><X className="h-4 w-4" aria-hidden="true" /></button> : null}
               </label>
             </div>
