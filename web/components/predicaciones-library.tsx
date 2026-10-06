@@ -18,10 +18,15 @@ const PAGE_SIZE = 12;
 const ALL_VIDEOS = "__all__";
 
 type YouTubePlayerEvent = { data: number };
-type YouTubePlayer = { destroy: () => void };
+type YouTubeVolumeEvent = { data: { muted: boolean; volume: number } };
+type YouTubePlayer = { destroy: () => void; unMute: () => void; setVolume: (volume: number) => void };
 type YouTubePlayerApi = {
   PlayerState: { ENDED: number };
-  Player: new (element: HTMLIFrameElement, options: { events: { onStateChange: (event: YouTubePlayerEvent) => void } }) => YouTubePlayer;
+  Player: new (element: HTMLIFrameElement, options: { events: {
+    onReady: (event: { target: YouTubePlayer }) => void;
+    onStateChange: (event: YouTubePlayerEvent) => void;
+    onVolumeChange: (event: YouTubeVolumeEvent) => void;
+  } }) => YouTubePlayer;
 };
 
 declare global {
@@ -75,11 +80,17 @@ function getEmbedUrl(videoId: string) {
   return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
 }
 
-function ShortsVideoFrame({ video, onEnded }: { video: YouTubeVideo; onEnded: () => void }) {
+function ShortsVideoFrame({ video, onEnded, soundEnabled, onSoundEnabled }: { video: YouTubeVideo; onEnded: () => void; soundEnabled: boolean; onSoundEnabled: () => void }) {
   const iframe = useRef<HTMLIFrameElement>(null);
   const onEndedRef = useRef(onEnded);
+  const soundEnabledRef = useRef(soundEnabled);
+  const onSoundEnabledRef = useRef(onSoundEnabled);
 
-  useEffect(() => { onEndedRef.current = onEnded; }, [onEnded]);
+  useEffect(() => {
+    onEndedRef.current = onEnded;
+    soundEnabledRef.current = soundEnabled;
+    onSoundEnabledRef.current = onSoundEnabled;
+  }, [onEnded, onSoundEnabled, soundEnabled]);
 
   useEffect(() => {
     let disposed = false;
@@ -88,8 +99,17 @@ function ShortsVideoFrame({ video, onEnded }: { video: YouTubeVideo; onEnded: ()
       if (disposed || !iframe.current) return;
       player = new api.Player(iframe.current, {
         events: {
+          onReady: (event) => {
+            if (soundEnabledRef.current) {
+              event.target.unMute();
+              event.target.setVolume(100);
+            }
+          },
           onStateChange: (event) => {
             if (event.data === api.PlayerState.ENDED) onEndedRef.current();
+          },
+          onVolumeChange: (event) => {
+            if (!event.data.muted) onSoundEnabledRef.current();
           },
         },
       });
@@ -108,6 +128,7 @@ function ShortsVideoFrame({ video, onEnded }: { video: YouTubeVideo; onEnded: ()
 function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: () => void }) {
   const scroller = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(videos[0]?.id);
+  const [soundEnabled, setSoundEnabled] = useState(false);
   const [hiddenDetailsFor, setHiddenDetailsFor] = useState<string | null>(null);
   const detailsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeIndex = Math.max(0, videos.findIndex((video) => video.id === activeId));
@@ -125,6 +146,7 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
       .find((article) => article.dataset.shortId === nextVideo?.id);
     nextArticle?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [activeIndex, videos]);
+  const rememberSoundEnabled = useCallback(() => setSoundEnabled(true), []);
 
   useEffect(() => {
     const root = scroller.current;
@@ -159,7 +181,7 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
 
   return (
     <div data-testid="shorts-viewer" onPointerMove={revealVideoDetails} onPointerDown={revealVideoDetails} className="fixed inset-0 z-[100] bg-black text-white" role="dialog" aria-modal="true" aria-label="Shorts de predicaciones">
-      <div className="fixed left-4 z-[130] flex items-center gap-2 sm:left-6" style={{ top: "max(env(safe-area-inset-top), 1.25rem)" }}>
+      <div data-testid="shorts-controls" className="fixed left-4 z-[130] flex items-center gap-2 sm:left-6" style={{ top: "max(env(safe-area-inset-top), 0.50rem)" }}>
         <div data-testid="shorts-progress" aria-live="polite" className="rounded-full border border-white/15 bg-black/65 px-3 py-2 text-xs font-medium text-white backdrop-blur-md">{activeIndex + 1} de {videos.length}</div>
         <button type="button" onClick={onClose} aria-label="Salir de Shorts" className="inline-flex min-h-9 items-center justify-center gap-1 rounded-full border border-white/15 bg-black/65 px-3 text-xs font-medium text-white shadow-lg backdrop-blur-md transition hover:border-white/30 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white sm:min-h-10">
           <X className="h-3.5 w-3.5" aria-hidden="true" />
@@ -171,7 +193,7 @@ function ShortsViewer({ videos, onClose }: { videos: YouTubeVideo[]; onClose: ()
           <article key={video.id} data-short-id={video.id} className="relative flex h-[100dvh] snap-start snap-always items-center justify-center bg-black">
             <div className="relative h-full max-h-[100dvh] w-full overflow-hidden sm:aspect-[9/16] sm:h-[min(92dvh,820px)] sm:w-auto sm:rounded-2xl sm:border sm:border-white/10">
               {activeId === video.id ? (
-                <ShortsVideoFrame video={video} onEnded={advanceShort} />
+                <ShortsVideoFrame video={video} onEnded={advanceShort} soundEnabled={soundEnabled} onSoundEnabled={rememberSoundEnabled} />
               ) : (
                 <Image src={video.thumbnail} alt="" fill sizes="(min-width: 640px) 460px, 100vw" className="object-contain" />
               )}
