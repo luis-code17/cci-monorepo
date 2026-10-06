@@ -134,7 +134,7 @@ export function PredicacionesLibrary({ videos, playlists, apiEnabled }: Predicac
   }, [sortOpen]);
 
   useEffect(() => {
-    if (!selection || !window.matchMedia("(max-width: 639px)").matches) return;
+    if (!selection) return;
     const frame = window.requestAnimationFrame(() => {
       searchInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     });

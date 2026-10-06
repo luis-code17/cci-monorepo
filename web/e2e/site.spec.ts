@@ -66,9 +66,7 @@ test("predicaciones keeps each panel separated and fits the viewport", async ({ 
 
   await page.getByRole("button", { name: /Todos los mensajes Todo el canal/ }).click();
   await expect(page.getByRole("heading", { name: "Todos los mensajes", exact: true })).toBeVisible();
-  if (await page.evaluate(() => innerWidth < 640)) {
-    await expect(page.getByRole("searchbox", { name: "Buscar en todos los mensajes" })).toBeInViewport();
-  }
+  await expect(page.getByRole("searchbox", { name: "Buscar en todos los mensajes" })).toBeInViewport();
 });
 
 test("shorts viewer stays above the footer and has a visible exit on desktop and mobile", async ({ page }) => {
