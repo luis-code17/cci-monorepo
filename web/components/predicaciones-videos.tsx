@@ -65,10 +65,10 @@ export function PredicacionesVideos({ videos, nextSectionId }: PredicacionesVide
         eyebrow="Predicaciones"
         title="Predicaciones y mensajes"
         background={{
-          light: "/predicaciones_light.jpeg",
-          dark: "/predicaciones_dark.jpeg",
-          mobile: "/predicaciones_mobile.jpeg",
-          mobileDark: "/predicaciones_dark.jpeg",
+          light: "/predicaciones_dark.jpeg",
+          dark: "/predicaciones_light.jpeg",
+          mobile: "/predicaciones_dark.jpeg",
+          mobileDark: "/predicaciones_mobile.jpeg",
         }}
         arrow={nextSectionId ? { href: nextSectionId, label: "Desplazarse al siguiente contenido" } : undefined}
         priority

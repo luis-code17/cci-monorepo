@@ -20,6 +20,23 @@ test("home renders and its shared background stays fixed without tiling", async 
   expect(dimensions.documentWidth).toBeLessThanOrEqual(dimensions.viewportWidth);
 });
 
+test("home preaching section uses the swapped light and dark backgrounds", async ({ page }) => {
+  await page.goto("/");
+
+  const backgrounds = await page.locator("#predicaciones-section").evaluate((section) =>
+    Object.fromEntries(Array.from(section.querySelectorAll<HTMLImageElement>("img[class*='section-theme-']"), (image) => {
+      const themeClass = Array.from(image.classList).find((name) => name.startsWith("section-theme-"));
+      return [themeClass, new URL(image.src).searchParams.get("url")];
+    })),
+  );
+  expect(backgrounds).toMatchObject({
+    "section-theme-light": "/predicaciones_dark.jpeg",
+    "section-theme-dark": "/predicaciones_light.jpeg",
+    "section-theme-mobile": "/predicaciones_dark.jpeg",
+    "section-theme-mobile-dark": "/predicaciones_mobile.jpeg",
+  });
+});
+
 test("main routes render without horizontal overflow", async ({ page }) => {
   const routes = [
     { path: "/about", heading: "CCI Sabadell" },
