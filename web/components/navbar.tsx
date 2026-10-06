@@ -62,7 +62,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="site-nav-controls navbar-center absolute right-0 flex translate-x-0 items-center gap-2">
+          <div className="site-nav-controls navbar-center absolute flex translate-x-0 items-center gap-2">
             <nav
               aria-label="Principal"
               className="site-desktop-nav rounded-full border border-base-content/10 bg-base-100/70 px-3 py-1.5 shadow-sm backdrop-blur-sm"

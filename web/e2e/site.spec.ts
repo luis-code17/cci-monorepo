@@ -198,6 +198,12 @@ test("mobile navigation opens and reaches the donation page", async ({ page }, t
   expect(mobileShell.background).not.toBe("rgba(0, 0, 0, 0)");
   const menuButton = page.getByLabel("Abrir menú");
   await expect(menuButton).toBeVisible();
+  const controlsRightGap = await page.locator(".site-nav-controls").evaluate((controls) => {
+    const controlsRight = controls.getBoundingClientRect().right;
+    const shellRight = controls.parentElement!.getBoundingClientRect().right;
+    return shellRight - controlsRight;
+  });
+  expect(controlsRightGap).toBeGreaterThanOrEqual(8);
   await menuButton.click();
   const mobileNav = page.getByRole("navigation", { name: "Menú móvil" });
   await expect(mobileNav.getByRole("link", { name: "Ofrendas y Diezmos" })).toBeVisible();

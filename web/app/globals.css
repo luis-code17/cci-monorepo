@@ -224,7 +224,7 @@ body {
 }
 
 .site-nav-controls {
-  right: 0;
+  right: 0.5rem;
   transform: translateX(0);
 }
 
